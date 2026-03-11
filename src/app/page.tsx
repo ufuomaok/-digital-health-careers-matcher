@@ -147,7 +147,7 @@ export default function LandingPage() {
       >
 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
   <Image
-    src="/Ufuoma O white.png"
+    src="/logo.png"
     alt="Ufuoma O. logo"
     width={32}
     height={32}
@@ -255,7 +255,7 @@ export default function LandingPage() {
             margin: "0 auto 40px",
           }}
         >
-          Answer 5 short questions. We match you to the NHS digital health roles
+          Answer 5 short questions. We match you to the digital health roles
           that fit your skills, background and ambitions — with salary bands, NHS
           grades and a clear path to get there.
         </p>
@@ -390,8 +390,8 @@ export default function LandingPage() {
             }}
           >
             Every digital health role sits within one of these five domains.
-            Here is a link to a course explaining the 5 pillars of digital health https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6
-            Your quiz results map you to the pillar — and the specific roles —
+<a href="https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6" target="_blank" rel="noopener noreferrer" style={{color: "#00e5ff"}}>Watch a free course explaining the 5 pillars of digital health</a>            
+            Your quiz results map you to the pillar and the specific roles
             that suit you best.
           </p>
         </div>
@@ -655,7 +655,7 @@ export default function LandingPage() {
           zIndex: 1,
         }}
       >
-        Digital Health Career Matcher · Built on real job postings ·{" "}
+        Digital Health Career Matcher by Ufuoma O.· Built on real job postings ·{" "}
         {new Date().getFullYear()}
       </footer>
 
