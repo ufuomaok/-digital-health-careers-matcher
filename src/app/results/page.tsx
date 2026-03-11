@@ -252,7 +252,7 @@ function Navbar({ showRetake }: { showRetake: boolean }) {
           <Activity size={16} color="#0a0e14" />
         </div>
         <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
-          Digital Health Careers
+          Digital Health Careers Matcher
         </span>
       </Link>
       {showRetake && (

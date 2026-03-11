@@ -18,7 +18,7 @@ const pillars = [
     id: "infrastructure",
     icon: Activity,
     label: "Infrastructure",
-    description: "Cloud, networking, EPR support, cybersecurity",
+    description: "The Foundation — Connectivity, Hardware, Digital Maturity",
     color: "#0ea5e9",
     bg: "rgba(14,165,233,0.08)",
     border: "rgba(14,165,233,0.25)",
@@ -29,7 +29,7 @@ const pillars = [
     id: "data",
     icon: Database,
     label: "Data & Analytics",
-    description: "SQL, Power BI, clinical coding, informatics",
+    description: "The Lifeblood — Information Flow, Standards, Governance",
     color: "#8b5cf6",
     bg: "rgba(139,92,246,0.08)",
     border: "rgba(139,92,246,0.25)",
@@ -40,7 +40,7 @@ const pillars = [
     id: "leadership",
     icon: Users,
     label: "Leadership & Strategy",
-    description: "Project management, change, product",
+    description: "The Compass — Direction, Governance, Transformation",
     color: "#f59e0b",
     bg: "rgba(245,158,11,0.08)",
     border: "rgba(245,158,11,0.25)",
@@ -51,7 +51,7 @@ const pillars = [
     id: "clinical",
     icon: Stethoscope,
     label: "Clinical Informatics",
-    description: "EPR analysts, nurse informaticists, safety",
+    description: "The Bedside — Workflow, Usability, Clinical Safety",
     color: "#10b981",
     bg: "rgba(16,185,129,0.08)",
     border: "rgba(16,185,129,0.25)",
@@ -62,7 +62,7 @@ const pillars = [
     id: "education",
     icon: GraduationCap,
     label: "Education & Training",
-    description: "Digital trainers, eLearning, LMS, coaching",
+    description: "The Future — Skills, Adoption, Digital Literacy",
     color: "#f43f5e",
     bg: "rgba(244,63,94,0.08)",
     border: "rgba(244,63,94,0.25)",
@@ -72,7 +72,7 @@ const pillars = [
 ];
 
 const stats = [
-  { value: "98", label: "NHS roles mapped" },
+  { value: "98", label: "Digital roles mapped" },
   { value: "5", label: "Career pillars" },
   { value: "51", label: "Skills assessed" },
   { value: "2 min", label: "To get matched" },
@@ -89,7 +89,7 @@ const howItWorks = [
     step: "02",
     title: "Select your skills",
     detail:
-      "Pick from a structured list of 51 NHS-relevant skills. Include ones you're currently studying too.",
+      "Pick from a structured list of 51 relevant skills. Include ones you're currently studying too.",
   },
   {
     step: "03",
@@ -147,13 +147,13 @@ export default function LandingPage() {
       >
 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
   <Image
-    src="/Ufuoma O.png"
+    src="/Ufuoma O white.png"
     alt="Ufuoma O. logo"
     width={32}
     height={32}
   />
   <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
-    Digital Health Careers
+    Digital Health Careers Matcher
   </span>
 </div>
         <a
@@ -390,6 +390,7 @@ export default function LandingPage() {
             }}
           >
             Every digital health role sits within one of these five domains.
+            Here is a link to a course explaining the 5 pillars of digital health https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6
             Your quiz results map you to the pillar — and the specific roles —
             that suit you best.
           </p>

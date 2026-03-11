@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Digital Health Career Matcher",
-  description: "Find your ideal digital health role in the NHS based on your skills and background.",
+  description: "Find your ideal digital health role based on your skills and background.",
 };
 
 export default function RootLayout({
