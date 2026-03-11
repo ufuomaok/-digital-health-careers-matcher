@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   ArrowRight,
   Stethoscope,
@@ -144,24 +145,17 @@ export default function LandingPage() {
           height: "60px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 8,
-              background: "linear-gradient(135deg, #00e5ff, #7c3aed)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Activity size={16} color="#0a0e14" />
-          </div>
-          <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
-            Digital Health Careers
-          </span>
-        </div>
+<div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+  <Image
+    src="/Ufuoma O.png"
+    alt="Ufuoma O. logo"
+    width={32}
+    height={32}
+  />
+  <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
+    Digital Health Careers
+  </span>
+</div>
         <a
           href="/quiz"
           style={{
@@ -227,7 +221,7 @@ export default function LandingPage() {
           }}
         >
           <CheckCircle size={12} />
-          Built on real NHS job postings
+          Built on real job postings
         </div>
 
         <h1
@@ -395,7 +389,7 @@ export default function LandingPage() {
               margin: "0 auto",
             }}
           >
-            Every NHS digital health role sits within one of these five domains.
+            Every digital health role sits within one of these five domains.
             Your quiz results map you to the pillar — and the specific roles —
             that suit you best.
           </p>
