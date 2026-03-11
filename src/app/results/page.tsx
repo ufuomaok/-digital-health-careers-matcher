@@ -1,0 +1,945 @@
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import {
+  Activity,
+  ArrowRight,
+  Stethoscope,
+  Database,
+  Users,
+  GraduationCap,
+  ChevronDown,
+  ChevronUp,
+  RotateCcw,
+} from "lucide-react";
+import rolesData from "../lib/roles.json";
+
+// ── TYPES ──────────────────────────────────────────────────────
+
+interface Role {
+  id: string;
+  title: string;
+  pillar: string;
+  level: string;
+  nhsBand: string;
+  salaryBand: { low: number; high: number };
+  skillsRequired: string[];
+  skillsDesirable: string[];
+  certifications: string[];
+  clinicianRequired: boolean;
+  backgroundMatch: string[];
+  description: string;
+}
+
+interface UserAnswers {
+  background: string;
+  clinicalIntent: string;
+  experience: string;
+  skillsInUse: string[];
+  skillsStudying: string[];
+  workPreferences: string[];
+}
+
+interface MatchedRole {
+  role: Role;
+  totalScore: number;
+  skillScore: number;
+  matchPercent: number;
+  gapSkills: string[];
+  nearSkills: string[];
+}
+
+// ── PILLAR CONFIG ──────────────────────────────────────────────
+
+const pillarConfig: Record<
+  string,
+  { label: string; color: string; rgb: string; icon: React.ElementType }
+> = {
+  infrastructure: {
+    label: "Infrastructure",
+    color: "#0ea5e9",
+    rgb: "14,165,233",
+    icon: Activity,
+  },
+  data: {
+    label: "Data & Analytics",
+    color: "#8b5cf6",
+    rgb: "139,92,246",
+    icon: Database,
+  },
+  leadership: {
+    label: "Leadership & Strategy",
+    color: "#f59e0b",
+    rgb: "245,158,11",
+    icon: Users,
+  },
+  clinical: {
+    label: "Clinical Informatics",
+    color: "#10b981",
+    rgb: "16,185,129",
+    icon: Stethoscope,
+  },
+  education: {
+    label: "Education & Training",
+    color: "#f43f5e",
+    rgb: "244,63,94",
+    icon: GraduationCap,
+  },
+};
+
+// ── MATCHING ENGINE ────────────────────────────────────────────
+
+function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
+  const allRoles: Role[] = [];
+  const pillars = rolesData.pillars as Record<string, { roles: Role[] }>;
+  for (const pillar of Object.values(pillars)) {
+    for (const role of pillar.roles) {
+      allRoles.push(role);
+    }
+  }
+
+  const userLevel =
+    answers.experience === "career-changer-exp" ||
+    answers.experience === "early-career"
+      ? "entry"
+      : answers.experience;
+
+  const results: MatchedRole[] = [];
+
+  for (const role of allRoles) {
+    if (!role.backgroundMatch.includes(answers.background)) continue;
+
+    if (
+      answers.background === "clinician" &&
+      answers.clinicalIntent === "leave-clinical" &&
+      role.clinicianRequired
+    )
+      continue;
+
+    if (role.clinicianRequired && answers.background !== "clinician") continue;
+
+    let skillPoints = 0;
+    let maxPoints = 0;
+
+    for (const skill of role.skillsRequired) {
+      maxPoints += 1.0;
+      if (answers.skillsInUse.includes(skill)) skillPoints += 1.0;
+      else if (answers.skillsStudying.includes(skill)) skillPoints += 0.5;
+    }
+
+    for (const skill of role.skillsDesirable) {
+      maxPoints += 0.5;
+      if (answers.skillsInUse.includes(skill)) skillPoints += 0.5;
+      else if (answers.skillsStudying.includes(skill)) skillPoints += 0.25;
+    }
+
+    const skillScore = maxPoints > 0 ? skillPoints / maxPoints : 0;
+    const pillarBoost = answers.workPreferences.includes(role.pillar) ? 1 : 0.3;
+    const expFit = role.level === "mid" && userLevel === "entry" ? 0.6 : 1.0;
+    const backgroundBonus =
+      answers.background === "nhs-non-clinical" ||
+      answers.background === "clinician"
+        ? 0.05
+        : 0;
+
+    const totalScore =
+      skillScore * 0.6 + pillarBoost * 0.25 + expFit * 0.15 + backgroundBonus;
+
+    const gapSkills = role.skillsRequired.filter(
+      (s) =>
+        !answers.skillsInUse.includes(s) &&
+        !answers.skillsStudying.includes(s)
+    );
+    const nearSkills = role.skillsRequired.filter((s) =>
+      answers.skillsStudying.includes(s)
+    );
+
+    results.push({
+      role,
+      totalScore,
+      skillScore,
+      matchPercent: Math.min(Math.round(totalScore * 100), 99),
+      gapSkills,
+      nearSkills,
+    });
+  }
+
+  return results.sort((a, b) => b.totalScore - a.totalScore).slice(0, 5);
+}
+
+// ── READ SESSION STORAGE ONCE AT MODULE LEVEL ─────────────────
+// This runs once when the page first loads — no useEffect needed.
+
+function getInitialData(): { answers: UserAnswers | null; matches: MatchedRole[] } {
+  if (typeof window === "undefined") {
+    return { answers: null, matches: [] };
+  }
+  const raw = sessionStorage.getItem("quizAnswers");
+  if (!raw) return { answers: null, matches: [] };
+  const answers: UserAnswers = JSON.parse(raw);
+  const matches = runMatchingEngine(answers);
+  return { answers, matches };
+}
+
+// ── HELPERS ────────────────────────────────────────────────────
+
+function formatSalary(n: number) {
+  return "£" + n.toLocaleString("en-GB");
+}
+
+function getScoreColor(pct: number) {
+  if (pct >= 70) return "#10b981";
+  if (pct >= 45) return "#f59e0b";
+  return "#0ea5e9";
+}
+
+// ── SHARED COMPONENTS ──────────────────────────────────────────
+
+function GridBg() {
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: 0,
+        backgroundImage:
+          "linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+      }}
+    />
+  );
+}
+
+function Navbar({ showRetake }: { showRetake: boolean }) {
+  return (
+    <nav
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        borderBottom: "1px solid #1e2d3f",
+        background: "rgba(10,14,20,0.9)",
+        backdropFilter: "blur(12px)",
+        padding: "0 24px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        height: "60px",
+      }}
+    >
+      <Link
+        href="/"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          textDecoration: "none",
+        }}
+      >
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: 8,
+            background: "linear-gradient(135deg, #00e5ff, #7c3aed)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Activity size={16} color="#0a0e14" />
+        </div>
+        <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
+          Digital Health Careers
+        </span>
+      </Link>
+      {showRetake && (
+        <Link
+          href="/quiz"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            background: "transparent",
+            color: "#6b8097",
+            fontSize: 13,
+            fontWeight: 600,
+            padding: "8px 16px",
+            borderRadius: 8,
+            border: "1px solid #1e2d3f",
+            textDecoration: "none",
+          }}
+        >
+          <RotateCcw size={13} /> Retake Quiz
+        </Link>
+      )}
+    </nav>
+  );
+}
+
+// ── MAIN COMPONENT ─────────────────────────────────────────────
+
+export default function ResultsPage() {
+  const { answers, matches } = getInitialData();
+  const [expandedId, setExpandedId] = useState<string | null>(null);
+
+  // ── NO ANSWERS ──
+  if (!answers) {
+    return (
+      <div
+        style={{
+          background: "#0a0e14",
+          minHeight: "100vh",
+          color: "#e2eaf4",
+          fontFamily: "system-ui, sans-serif",
+        }}
+      >
+        <GridBg />
+        <Navbar showRetake={false} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: "80vh",
+            padding: "24px",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <div style={{ textAlign: "center", maxWidth: 400 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>🤔</div>
+            <h2
+              style={{
+                color: "#fff",
+                fontSize: 24,
+                fontWeight: 800,
+                marginBottom: 12,
+              }}
+            >
+              No quiz answers found
+            </h2>
+            <p style={{ color: "#6b8097", marginBottom: 24 }}>
+              It looks like you came here directly. Please take the quiz first
+              so we can match you to the right roles.
+            </p>
+            <Link
+              href="/quiz"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "#00e5ff",
+                color: "#0a0e14",
+                fontWeight: 800,
+                fontSize: 15,
+                padding: "12px 24px",
+                borderRadius: 8,
+                textDecoration: "none",
+              }}
+            >
+              Take the Quiz <ArrowRight size={16} />
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const topMatch = matches[0];
+
+  // ── RESULTS ──
+  return (
+    <div
+      style={{
+        background: "#0a0e14",
+        minHeight: "100vh",
+        color: "#e2eaf4",
+        fontFamily: "system-ui, sans-serif",
+      }}
+    >
+      <GridBg />
+      <Navbar showRetake={true} />
+
+      <div
+        style={{
+          position: "relative",
+          zIndex: 1,
+          maxWidth: 720,
+          margin: "0 auto",
+          padding: "48px 24px 80px",
+        }}
+      >
+        {/* Hero */}
+        <div
+          style={{
+            background:
+              "linear-gradient(135deg, rgba(0,229,255,0.06), rgba(124,58,237,0.06))",
+            border: "1px solid rgba(0,229,255,0.15)",
+            borderRadius: 16,
+            padding: "36px 32px",
+            marginBottom: 32,
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: -40,
+              right: -40,
+              width: 200,
+              height: 200,
+              background:
+                "radial-gradient(circle, rgba(0,229,255,0.07), transparent 70%)",
+              pointerEvents: "none",
+            }}
+          />
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.15em",
+              color: "#00e5ff",
+              marginBottom: 12,
+            }}
+          >
+            Your Results
+          </div>
+          <h1
+            style={{
+              fontSize: "clamp(22px, 4vw, 34px)",
+              fontWeight: 800,
+              color: "#fff",
+              lineHeight: 1.2,
+              marginBottom: 10,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            {matches.length > 0
+              ? `We found ${matches.length} roles that match your profile`
+              : "No strong matches found"}
+          </h1>
+          {topMatch && (
+            <p
+              style={{
+                fontSize: 15,
+                color: "#6b8097",
+                maxWidth: 480,
+                margin: "0 auto",
+              }}
+            >
+              Your top match is{" "}
+              <strong style={{ color: "#fff" }}>{topMatch.role.title}</strong>{" "}
+              with a{" "}
+              <strong style={{ color: "#00e5ff" }}>
+                {topMatch.matchPercent}% match
+              </strong>
+              . Scroll down to see all your results.
+            </p>
+          )}
+          {matches.length === 0 && (
+            <div style={{ marginTop: 20 }}>
+              <p style={{ color: "#6b8097", marginBottom: 16 }}>
+                Try selecting more skills or a different background to broaden
+                your results.
+              </p>
+              <Link
+                href="/quiz"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 8,
+                  background: "#00e5ff",
+                  color: "#0a0e14",
+                  fontWeight: 800,
+                  fontSize: 14,
+                  padding: "10px 20px",
+                  borderRadius: 8,
+                  textDecoration: "none",
+                }}
+              >
+                Retake Quiz <ArrowRight size={14} />
+              </Link>
+            </div>
+          )}
+        </div>
+
+        {/* Match cards */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {matches.map((match, index) => {
+            const { role, matchPercent, gapSkills, nearSkills } = match;
+            const pillar =
+              pillarConfig[role.pillar] || pillarConfig.infrastructure;
+            const PillarIcon = pillar.icon;
+            const isExpanded = expandedId === role.id;
+            const scoreColor = getScoreColor(matchPercent);
+
+            return (
+              <div
+                key={role.id}
+                style={{
+                  background: "#111720",
+                  border:
+                    index === 0
+                      ? "1px solid rgba(0,229,255,0.25)"
+                      : "1px solid #1e2d3f",
+                  borderRadius: 14,
+                  overflow: "hidden",
+                }}
+              >
+                {index === 0 && (
+                  <div
+                    style={{
+                      background:
+                        "linear-gradient(to right, rgba(0,229,255,0.15), rgba(124,58,237,0.1))",
+                      padding: "6px 20px",
+                      fontSize: 11,
+                      fontWeight: 700,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      color: "#00e5ff",
+                      borderBottom: "1px solid rgba(0,229,255,0.15)",
+                    }}
+                  >
+                    ⭐ Top Match
+                  </div>
+                )}
+
+                <div style={{ padding: "20px 24px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 16,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 12,
+                        flex: 1,
+                        minWidth: 200,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 44,
+                          height: 44,
+                          borderRadius: 10,
+                          flexShrink: 0,
+                          background: `rgba(${pillar.rgb},0.12)`,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          border: `1px solid rgba(${pillar.rgb},0.2)`,
+                        }}
+                      >
+                        <PillarIcon size={20} color={pillar.color} />
+                      </div>
+                      <div>
+                        <div
+                          style={{
+                            fontWeight: 800,
+                            fontSize: 16,
+                            color: "#fff",
+                            marginBottom: 4,
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {role.title}
+                        </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 8,
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          <span
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 600,
+                              padding: "2px 8px",
+                              borderRadius: 100,
+                              background: `rgba(${pillar.rgb},0.1)`,
+                              color: pillar.color,
+                              border: `1px solid rgba(${pillar.rgb},0.2)`,
+                            }}
+                          >
+                            {pillar.label}
+                          </span>
+                          <span style={{ fontSize: 12, color: "#6b8097" }}>
+                            NHS Band {role.nhsBand}
+                          </span>
+                          <span style={{ fontSize: 12, color: "#6b8097" }}>
+                            {formatSalary(role.salaryBand.low)} –{" "}
+                            {formatSalary(role.salaryBand.high)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ textAlign: "center", flexShrink: 0 }}>
+                      <div
+                        style={{
+                          fontSize: 32,
+                          fontWeight: 800,
+                          color: scoreColor,
+                          lineHeight: 1,
+                        }}
+                      >
+                        {matchPercent}%
+                      </div>
+                      <div
+                        style={{ fontSize: 11, color: "#6b8097", marginTop: 2 }}
+                      >
+                        match
+                      </div>
+                    </div>
+                  </div>
+
+                  <div
+                    style={{
+                      height: 4,
+                      background: "#1e2d3f",
+                      borderRadius: 100,
+                      marginTop: 16,
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        height: "100%",
+                        width: `${matchPercent}%`,
+                        background: `linear-gradient(to right, ${scoreColor}, ${scoreColor}aa)`,
+                        borderRadius: 100,
+                      }}
+                    />
+                  </div>
+
+                  <button
+                    onClick={() =>
+                      setExpandedId(isExpanded ? null : role.id)
+                    }
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      marginTop: 14,
+                      padding: "6px 0",
+                      background: "transparent",
+                      border: "none",
+                      color: "#6b8097",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                    }}
+                  >
+                    {isExpanded ? (
+                      <>
+                        <ChevronUp size={15} /> Hide details
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown size={15} /> View full details, skills gap &amp; certifications
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {isExpanded && (
+                  <div
+                    style={{ borderTop: "1px solid #1e2d3f", padding: "24px" }}
+                  >
+                    <p
+                      style={{
+                        fontSize: 14,
+                        color: "#9ab0c4",
+                        lineHeight: 1.7,
+                        marginBottom: 24,
+                      }}
+                    >
+                      {role.description}
+                    </p>
+
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns:
+                          "repeat(auto-fit, minmax(200px, 1fr))",
+                        gap: 20,
+                      }}
+                    >
+                      <div>
+                        <div
+                          style={{
+                            fontSize: 11,
+                            fontWeight: 700,
+                            textTransform: "uppercase",
+                            letterSpacing: "0.1em",
+                            color: "#10b981",
+                            marginBottom: 10,
+                          }}
+                        >
+                          ✅ Skills you have
+                        </div>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                          {role.skillsRequired
+                            .filter((s) => answers.skillsInUse.includes(s))
+                            .map((s) => (
+                              <span
+                                key={s}
+                                style={{
+                                  fontSize: 12,
+                                  padding: "3px 10px",
+                                  borderRadius: 100,
+                                  background: "rgba(16,185,129,0.1)",
+                                  color: "#10b981",
+                                  border: "1px solid rgba(16,185,129,0.2)",
+                                }}
+                              >
+                                {s}
+                              </span>
+                            ))}
+                          {role.skillsRequired.filter((s) =>
+                            answers.skillsInUse.includes(s)
+                          ).length === 0 && (
+                            <span style={{ fontSize: 13, color: "#3a5068" }}>
+                              None matched yet
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {nearSkills.length > 0 && (
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 700,
+                              textTransform: "uppercase",
+                              letterSpacing: "0.1em",
+                              color: "#f59e0b",
+                              marginBottom: 10,
+                            }}
+                          >
+                            📖 Currently studying
+                          </div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                            {nearSkills.map((s) => (
+                              <span
+                                key={s}
+                                style={{
+                                  fontSize: 12,
+                                  padding: "3px 10px",
+                                  borderRadius: 100,
+                                  background: "rgba(245,158,11,0.1)",
+                                  color: "#f59e0b",
+                                  border: "1px solid rgba(245,158,11,0.2)",
+                                }}
+                              >
+                                {s}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {gapSkills.length > 0 && (
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 700,
+                              textTransform: "uppercase",
+                              letterSpacing: "0.1em",
+                              color: "#f43f5e",
+                              marginBottom: 10,
+                            }}
+                          >
+                            🎯 Skills to develop
+                          </div>
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                            {gapSkills.map((s) => (
+                              <span
+                                key={s}
+                                style={{
+                                  fontSize: 12,
+                                  padding: "3px 10px",
+                                  borderRadius: 100,
+                                  background: "rgba(244,63,94,0.08)",
+                                  color: "#f43f5e",
+                                  border: "1px solid rgba(244,63,94,0.2)",
+                                }}
+                              >
+                                {s}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {role.certifications.length > 0 && (
+                        <div>
+                          <div
+                            style={{
+                              fontSize: 11,
+                              fontWeight: 700,
+                              textTransform: "uppercase",
+                              letterSpacing: "0.1em",
+                              color: "#8b5cf6",
+                              marginBottom: 10,
+                            }}
+                          >
+                            🏆 Recommended certifications
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: 6,
+                            }}
+                          >
+                            {role.certifications.map((cert) => (
+                              <div
+                                key={cert}
+                                style={{
+                                  fontSize: 12,
+                                  padding: "6px 12px",
+                                  borderRadius: 8,
+                                  background: "rgba(139,92,246,0.08)",
+                                  color: "#c4b5fd",
+                                  border: "1px solid rgba(139,92,246,0.2)",
+                                }}
+                              >
+                                {cert}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div
+                      style={{
+                        marginTop: 20,
+                        paddingTop: 20,
+                        borderTop: "1px solid #1e2d3f",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: 12,
+                      }}
+                    >
+                      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                        <span
+                          style={{
+                            fontSize: 12,
+                            padding: "4px 12px",
+                            borderRadius: 6,
+                            background:
+                              role.level === "entry"
+                                ? "rgba(16,185,129,0.1)"
+                                : "rgba(245,158,11,0.1)",
+                            color:
+                              role.level === "entry" ? "#10b981" : "#f59e0b",
+                            border: `1px solid ${
+                              role.level === "entry"
+                                ? "rgba(16,185,129,0.2)"
+                                : "rgba(245,158,11,0.2)"
+                            }`,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {role.level === "entry" ? "Entry level" : "Mid level"}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 12,
+                            padding: "4px 12px",
+                            borderRadius: 6,
+                            background: "rgba(0,229,255,0.08)",
+                            color: "#00e5ff",
+                            border: "1px solid rgba(0,229,255,0.2)",
+                            fontWeight: 600,
+                          }}
+                        >
+                          Band {role.nhsBand}
+                        </span>
+                      </div>
+                      <Link
+                        href={`https://www.jobs.nhs.uk/candidate/search/results?keyword=${encodeURIComponent(
+                          role.title
+                        )}`}
+                        target="_blank"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          fontSize: 13,
+                          fontWeight: 700,
+                          color: "#0a0e14",
+                          background: "#00e5ff",
+                          padding: "8px 16px",
+                          borderRadius: 8,
+                          textDecoration: "none",
+                        }}
+                      >
+                        Search NHS Jobs <ArrowRight size={13} />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {matches.length > 0 && (
+          <div
+            style={{
+              marginTop: 40,
+              textAlign: "center",
+              padding: "32px",
+              background: "rgba(17,23,32,0.6)",
+              border: "1px solid #1e2d3f",
+              borderRadius: 12,
+            }}
+          >
+            <p style={{ color: "#6b8097", fontSize: 14, marginBottom: 16 }}>
+              Not seeing what you expected? Try updating your skills or changing
+              your preferences.
+            </p>
+            <Link
+              href="/quiz"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                background: "transparent",
+                color: "#e2eaf4",
+                fontWeight: 700,
+                fontSize: 14,
+                padding: "10px 20px",
+                borderRadius: 8,
+                border: "1px solid #1e2d3f",
+                textDecoration: "none",
+              }}
+            >
+              <RotateCcw size={14} /> Retake the Quiz
+            </Link>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
