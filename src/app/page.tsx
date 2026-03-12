@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -12,6 +12,7 @@ import {
   GraduationCap,
   CheckCircle,
   ChevronDown,
+  Eye,
 } from "lucide-react";
 
 const pillars = [
@@ -101,18 +102,23 @@ const howItWorks = [
 
 export default function LandingPage() {
   const [visible, setVisible] = useState(false);
-  const [userCount, setUserCount] = useState<number | null>(null);
-
+  const [visitCount, setVisitCount] = useState<number | null>(null);
+  const [matchCount, setMatchCount] = useState<number | null>(null);
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
+    fetch("/api/visit-counter", { method: "POST" })
+      .then((res) => res.json())
+      .then((data) => setVisitCount(data.count))
+      .catch(() => setVisitCount(null));
+
     fetch("/api/get-counter")
       .then((res) => res.json())
-      .then((data) => setUserCount(data.count))
-      .catch(() => setUserCount(null));
+      .then((data) => setMatchCount(data.count))
+      .catch(() => setMatchCount(null));
   }, []);
 
   const stats = [
@@ -120,7 +126,7 @@ export default function LandingPage() {
     { value: "5", label: "Career pillars" },
     { value: "51", label: "Skills assessed" },
     {
-      value: userCount !== null ? userCount.toLocaleString("en-GB") : "...",
+      value: matchCount !== null ? matchCount.toLocaleString("en-GB") : "...",
       label: "Professionals matched",
       live: true,
     },
@@ -130,230 +136,182 @@ export default function LandingPage() {
     <div style={{ background: "#ffffff", minHeight: "100vh", color: "#111720", fontFamily: "system-ui, sans-serif" }}>
 
       {/* GRID BACKGROUND */}
-      <div
-        style={{
-          position: "fixed",
-          inset: 0,
-          pointerEvents: "none",
-          zIndex: 0,
-          backgroundImage:
-            "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
-          backgroundSize: "40px 40px",
-        }}
-      />
+      <div style={{
+        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+        backgroundImage: "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+      }} />
 
       {/* NAVBAR */}
-      <nav
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 50,
-          borderBottom: "1px solid #e5e7eb",
-          background: "rgba(255,255,255,0.95)",
-          backdropFilter: "blur(12px)",
-          padding: "0 24px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          height: "60px",
-        }}
-      >
+      <nav style={{
+        position: "sticky", top: 0, zIndex: 50,
+        borderBottom: "1px solid #e5e7eb",
+        background: "rgba(255,255,255,0.95)",
+        backdropFilter: "blur(12px)",
+        padding: "0 24px",
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        height: "60px",
+      }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <Image src="/logo.png" alt="Ufuoma O. logo" width={32} height={32} />
           <span style={{ fontWeight: 700, fontSize: 15, color: "#111720" }}>
             Digital Health Careers Matcher
           </span>
         </div>
-        <Link
-          href="/quiz"
-          style={{
-            background: "#0ea5e9",
-            color: "#ffffff",
-            fontWeight: 700,
-            fontSize: 13,
-            padding: "8px 18px",
-            borderRadius: 8,
-            textDecoration: "none",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-          }}
-        >
+        <Link href="/quiz" style={{
+          background: "#0ea5e9", color: "#ffffff",
+          fontWeight: 700, fontSize: 13,
+          padding: "8px 18px", borderRadius: 8,
+          textDecoration: "none",
+          display: "flex", alignItems: "center", gap: 6,
+        }}>
           Find My Career <ArrowRight size={14} />
         </Link>
       </nav>
 
       {/* HERO */}
-      <section
-        style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 960,
-          margin: "0 auto",
-          padding: "100px 24px 80px",
-          textAlign: "center",
-          opacity: visible ? 1 : 0,
-          transform: visible ? "translateY(0)" : "translateY(24px)",
-          transition: "opacity 0.7s ease, transform 0.7s ease",
-        }}
-      >
-        <div
-          style={{
-            position: "absolute",
-            top: 40,
-            left: "50%",
-            transform: "translateX(-50%)",
-            width: 500,
-            height: 300,
-            background: "radial-gradient(ellipse, rgba(14,165,233,0.06) 0%, transparent 70%)",
-            pointerEvents: "none",
-          }}
-        />
+      <section style={{
+        position: "relative", zIndex: 1,
+        maxWidth: 960, margin: "0 auto",
+        padding: "100px 24px 80px",
+        textAlign: "center",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(24px)",
+        transition: "opacity 0.7s ease, transform 0.7s ease",
+      }}>
+        {/* Glow blob */}
+        <div style={{
+          position: "absolute", top: 40, left: "50%",
+          transform: "translateX(-50%)",
+          width: 500, height: 300,
+          background: "radial-gradient(ellipse, rgba(14,165,233,0.06) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
 
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
+        {/* Top badge row — two badges side by side */}
+        <div style={{
+          display: "flex", alignItems: "center", justifyContent: "center",
+          gap: 10, flexWrap: "wrap", marginBottom: 28,
+        }}>
+          {/* Built on real job postings badge */}
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
             background: "rgba(14,165,233,0.06)",
             border: "1px solid rgba(14,165,233,0.2)",
-            borderRadius: 100,
-            padding: "6px 16px",
-            fontSize: 12,
-            color: "#0ea5e9",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: 28,
-          }}
-        >
-          <CheckCircle size={12} />
-          Built on real job postings
+            borderRadius: 100, padding: "6px 16px",
+            fontSize: 12, color: "#0ea5e9",
+            letterSpacing: "0.1em", textTransform: "uppercase",
+          }}>
+            <CheckCircle size={12} />
+            Built on real job postings
+          </div>
+
+          {/* Live visitor counter badge */}
+          {visitCount !== null && (
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "rgba(16,185,129,0.06)",
+              border: "1px solid rgba(16,185,129,0.2)",
+              borderRadius: 100, padding: "6px 16px",
+              fontSize: 12, color: "#10b981",
+              letterSpacing: "0.05em",
+            }}>
+              <Eye size={12} />
+              <span>
+                <strong style={{ fontWeight: 800 }}>
+                  {visitCount.toLocaleString("en-GB")}
+                </strong>{" "}
+                {visitCount === 1 ? "person has" : "people have"} visited this tool
+              </span>
+              {/* Live green dot */}
+              <span style={{
+                width: 7, height: 7, borderRadius: "50%",
+                background: "#10b981",
+                boxShadow: "0 0 6px rgba(16,185,129,0.7)",
+                display: "inline-block", flexShrink: 0,
+              }} />
+            </div>
+          )}
         </div>
 
-        <h1
-          style={{
-            fontSize: "clamp(36px, 6vw, 64px)",
-            fontWeight: 800,
-            lineHeight: 1.1,
-            color: "#111720",
-            marginBottom: 24,
-            letterSpacing: "-0.02em",
-          }}
-        >
+        <h1 style={{
+          fontSize: "clamp(36px, 6vw, 64px)",
+          fontWeight: 800, lineHeight: 1.1,
+          color: "#111720", marginBottom: 24,
+          letterSpacing: "-0.02em",
+        }}>
           Find your place in{" "}
-          <span
-            style={{
-              background: "linear-gradient(135deg, #0ea5e9, #7c3aed)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
+          <span style={{
+            background: "linear-gradient(135deg, #0ea5e9, #7c3aed)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}>
             Digital Health
           </span>
         </h1>
 
-        <p
-          style={{
-            fontSize: "clamp(16px, 2vw, 20px)",
-            color: "#6b7280",
-            lineHeight: 1.7,
-            maxWidth: 560,
-            margin: "0 auto 40px",
-          }}
-        >
+        <p style={{
+          fontSize: "clamp(16px, 2vw, 20px)",
+          color: "#6b7280", lineHeight: 1.7,
+          maxWidth: 560, margin: "0 auto 40px",
+        }}>
           Answer 5 short questions. We match you to the digital health roles
           that fit your skills, background and ambitions — with salary bands, NHS
           grades and a clear path to get there.
         </p>
 
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <Link
-            href="/quiz"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              background: "#0ea5e9",
-              color: "#ffffff",
-              fontWeight: 800,
-              fontSize: 16,
-              padding: "16px 32px",
-              borderRadius: 10,
-              textDecoration: "none",
-              boxShadow: "0 4px 20px rgba(14,165,233,0.25)",
-            }}
-          >
+          <Link href="/quiz" style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
+            background: "#0ea5e9", color: "#ffffff",
+            fontWeight: 800, fontSize: 16,
+            padding: "16px 32px", borderRadius: 10,
+            textDecoration: "none",
+            boxShadow: "0 4px 20px rgba(14,165,233,0.25)",
+          }}>
             Find My Career Match <ArrowRight size={18} />
           </Link>
-          <a
-            href="#pillars"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "transparent",
-              color: "#111720",
-              fontWeight: 600,
-              fontSize: 15,
-              padding: "16px 24px",
-              borderRadius: 10,
-              textDecoration: "none",
-              border: "1px solid #e5e7eb",
-            }}
-          >
+          <a href="#pillars" style={{
+            display: "inline-flex", alignItems: "center", gap: 8,
+            background: "transparent", color: "#111720",
+            fontWeight: 600, fontSize: 15,
+            padding: "16px 24px", borderRadius: 10,
+            textDecoration: "none", border: "1px solid #e5e7eb",
+          }}>
             Explore the 5 pillars <ChevronDown size={16} />
           </a>
         </div>
       </section>
 
-      {/* STATS */}
-      <section
-        style={{
-          position: "relative",
-          zIndex: 1,
-          borderTop: "1px solid #e5e7eb",
-          borderBottom: "1px solid #e5e7eb",
-          background: "#f9fafb",
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 960,
-            margin: "0 auto",
-            padding: "32px 24px",
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-            gap: 24,
-            textAlign: "center",
-          }}
-        >
+      {/* STATS BAR */}
+      <section style={{
+        position: "relative", zIndex: 1,
+        borderTop: "1px solid #e5e7eb",
+        borderBottom: "1px solid #e5e7eb",
+        background: "#f9fafb",
+      }}>
+        <div style={{
+          maxWidth: 960, margin: "0 auto",
+          padding: "32px 24px",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+          gap: 24, textAlign: "center",
+        }}>
           {stats.map((s) => (
             <div key={s.label}>
-              <div
-                style={{
-                  fontSize: 36,
-                  fontWeight: 800,
-                  color: "#0ea5e9",
-                  lineHeight: 1,
-                  marginBottom: 6,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 6,
-                }}
-              >
+              <div style={{
+                fontSize: 36, fontWeight: 800, color: "#0ea5e9",
+                lineHeight: 1, marginBottom: 6,
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+              }}>
                 {s.value}
                 {"live" in s && s.live && (
-                  <span
-                    style={{
-                      width: 8,
-                      height: 8,
-                      borderRadius: "50%",
-                      background: "#10b981",
-                      display: "inline-block",
-                      boxShadow: "0 0 6px rgba(16,185,129,0.6)",
-                    }}
-                  />
+                  <span style={{
+                    width: 8, height: 8, borderRadius: "50%",
+                    background: "#10b981",
+                    display: "inline-block",
+                    boxShadow: "0 0 6px rgba(16,185,129,0.6)",
+                  }} />
                 )}
               </div>
               <div style={{ fontSize: 13, color: "#6b7280" }}>{s.label}</div>
@@ -363,16 +321,11 @@ export default function LandingPage() {
       </section>
 
       {/* 5 PILLARS */}
-      <section
-        id="pillars"
-        style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 960,
-          margin: "0 auto",
-          padding: "80px 24px",
-        }}
-      >
+      <section id="pillars" style={{
+        position: "relative", zIndex: 1,
+        maxWidth: 960, margin: "0 auto",
+        padding: "80px 24px",
+      }}>
         <div style={{ textAlign: "center", marginBottom: 48 }}>
           <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
             The Framework
@@ -384,8 +337,7 @@ export default function LandingPage() {
             Every digital health role sits within one of these five domains.{" "}
             <a
               href="https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6"
-              target="_blank"
-              rel="noopener noreferrer"
+              target="_blank" rel="noopener noreferrer"
               style={{ color: "#0ea5e9", textDecoration: "underline" }}
             >
               Watch a free course explaining the 5 pillars of digital health
@@ -398,30 +350,23 @@ export default function LandingPage() {
           {pillars.map((p) => {
             const Icon = p.icon;
             return (
-              <div
-                key={p.id}
-                style={{ background: p.bg, border: `1px solid ${p.border}`, borderRadius: 12, padding: "24px" }}
-              >
-                <div
-                  style={{
-                    width: 44, height: 44, borderRadius: 10,
-                    background: `rgba(${p.iconRgb},0.1)`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    marginBottom: 16,
-                  }}
-                >
+              <div key={p.id} style={{ background: p.bg, border: `1px solid ${p.border}`, borderRadius: 12, padding: "24px" }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 10,
+                  background: `rgba(${p.iconRgb},0.1)`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  marginBottom: 16,
+                }}>
                   <Icon size={22} color={p.color} />
                 </div>
                 <div style={{ fontWeight: 700, fontSize: 16, color: "#111720", marginBottom: 6 }}>{p.label}</div>
                 <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.6, marginBottom: 16 }}>{p.description}</div>
-                <div
-                  style={{
-                    display: "inline-block", fontSize: 11, fontWeight: 700,
-                    padding: "3px 10px", borderRadius: 100,
-                    background: `rgba(${p.iconRgb},0.08)`,
-                    color: p.color, border: `1px solid ${p.border}`,
-                  }}
-                >
+                <div style={{
+                  display: "inline-block", fontSize: 11, fontWeight: 700,
+                  padding: "3px 10px", borderRadius: 100,
+                  background: `rgba(${p.iconRgb},0.08)`,
+                  color: p.color, border: `1px solid ${p.border}`,
+                }}>
                   {p.roles} roles mapped
                 </div>
               </div>
@@ -431,15 +376,11 @@ export default function LandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section
-        style={{
-          position: "relative",
-          zIndex: 1,
-          borderTop: "1px solid #e5e7eb",
-          background: "#f9fafb",
-          padding: "80px 24px",
-        }}
-      >
+      <section style={{
+        position: "relative", zIndex: 1,
+        borderTop: "1px solid #e5e7eb",
+        background: "#f9fafb", padding: "80px 24px",
+      }}>
         <div style={{ maxWidth: 960, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
@@ -449,7 +390,6 @@ export default function LandingPage() {
               Four steps to clarity
             </h2>
           </div>
-
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 24 }}>
             {howItWorks.map((item, i) => (
               <div key={i}>
@@ -465,26 +405,17 @@ export default function LandingPage() {
       </section>
 
       {/* FINAL CTA */}
-      <section
-        style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 960,
-          margin: "0 auto",
-          padding: "80px 24px",
-          textAlign: "center",
-        }}
-      >
-        <div
-          style={{
-            background: "linear-gradient(135deg, rgba(14,165,233,0.06), rgba(124,58,237,0.06))",
-            border: "1px solid rgba(14,165,233,0.2)",
-            borderRadius: 16,
-            padding: "60px 32px",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
+      <section style={{
+        position: "relative", zIndex: 1,
+        maxWidth: 960, margin: "0 auto",
+        padding: "80px 24px", textAlign: "center",
+      }}>
+        <div style={{
+          background: "linear-gradient(135deg, rgba(14,165,233,0.06), rgba(124,58,237,0.06))",
+          border: "1px solid rgba(14,165,233,0.2)",
+          borderRadius: 16, padding: "60px 32px",
+          position: "relative", overflow: "hidden",
+        }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 240, height: 240, background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: -60, left: -60, width: 240, height: 240, background: "radial-gradient(circle, rgba(124,58,237,0.07), transparent 70%)", pointerEvents: "none" }} />
           <p style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 16 }}>
@@ -494,43 +425,30 @@ export default function LandingPage() {
             Ready to find your role?
           </h2>
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 420, margin: "0 auto 32px" }}>
-            {userCount !== null && userCount > 0
-              ? `Join ${userCount.toLocaleString("en-GB")} NHS professionals who have used this tool to find their next step in digital health.`
+            {matchCount !== null && matchCount > 0
+              ? `Join ${matchCount.toLocaleString("en-GB")} NHS professionals who have used this tool to find their next step in digital health.`
               : "Join NHS professionals who have used this tool to find their next step in digital health."}
           </p>
-          <Link
-            href="/quiz"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 10,
-              background: "#0ea5e9",
-              color: "#ffffff",
-              fontWeight: 800,
-              fontSize: 16,
-              padding: "16px 36px",
-              borderRadius: 10,
-              textDecoration: "none",
-              boxShadow: "0 4px 20px rgba(14,165,233,0.25)",
-            }}
-          >
+          <Link href="/quiz" style={{
+            display: "inline-flex", alignItems: "center", gap: 10,
+            background: "#0ea5e9", color: "#ffffff",
+            fontWeight: 800, fontSize: 16,
+            padding: "16px 36px", borderRadius: 10,
+            textDecoration: "none",
+            boxShadow: "0 4px 20px rgba(14,165,233,0.25)",
+          }}>
             Start the Quiz — It&apos;s Free <ArrowRight size={18} />
           </Link>
         </div>
       </section>
 
       {/* FOOTER */}
-      <footer
-        style={{
-          borderTop: "1px solid #e5e7eb",
-          padding: "24px",
-          textAlign: "center",
-          fontSize: 13,
-          color: "#9ca3af",
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
+      <footer style={{
+        borderTop: "1px solid #e5e7eb",
+        padding: "24px", textAlign: "center",
+        fontSize: 13, color: "#9ca3af",
+        position: "relative", zIndex: 1,
+      }}>
         Digital Health Career Matcher by Ufuoma O. · Built on real job postings ·{" "}
         {new Date().getFullYear()}
       </footer>
