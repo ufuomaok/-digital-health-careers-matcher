@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRight,
   Stethoscope,
@@ -155,7 +156,7 @@ function Navbar({ showRetake }: { showRetake: boolean }) {
       height: "60px",
     }}>
       <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-        <img src="/logo.png" alt="Logo" style={{ height: 32, width: "auto" }} />
+        <Image src="/logo.png" alt="Logo" width={32} height={32} style={{ width: "auto" }} />
         <span style={{ fontWeight: 700, fontSize: 15, color: "#111720" }}>
           Digital Health Careers Matcher
         </span>
