@@ -12,6 +12,8 @@ import {
   ChevronUp,
   RotateCcw,
   Activity,
+  Share2,
+  Check,
 } from "lucide-react";
 import rolesData from "../lib/roles.json";
 
@@ -56,36 +58,11 @@ const pillarConfig: Record<
   string,
   { label: string; color: string; rgb: string; icon: React.ElementType }
 > = {
-  infrastructure: {
-    label: "Infrastructure",
-    color: "#0ea5e9",
-    rgb: "14,165,233",
-    icon: Activity,
-  },
-  data: {
-    label: "Data & Analytics",
-    color: "#8b5cf6",
-    rgb: "139,92,246",
-    icon: Database,
-  },
-  leadership: {
-    label: "Leadership & Strategy",
-    color: "#f59e0b",
-    rgb: "245,158,11",
-    icon: Users,
-  },
-  clinical: {
-    label: "Clinical Informatics",
-    color: "#10b981",
-    rgb: "16,185,129",
-    icon: Stethoscope,
-  },
-  education: {
-    label: "Education & Training",
-    color: "#f43f5e",
-    rgb: "244,63,94",
-    icon: GraduationCap,
-  },
+  infrastructure: { label: "Infrastructure", color: "#0ea5e9", rgb: "14,165,233", icon: Activity },
+  data: { label: "Data & Analytics", color: "#8b5cf6", rgb: "139,92,246", icon: Database },
+  leadership: { label: "Leadership & Strategy", color: "#f59e0b", rgb: "245,158,11", icon: Users },
+  clinical: { label: "Clinical Informatics", color: "#10b981", rgb: "16,185,129", icon: Stethoscope },
+  education: { label: "Education & Training", color: "#f43f5e", rgb: "244,63,94", icon: GraduationCap },
 };
 
 // ── MATCHING ENGINE ────────────────────────────────────────────
@@ -94,14 +71,11 @@ function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
   const allRoles: Role[] = [];
   const pillars = rolesData.pillars as Record<string, { roles: Role[] }>;
   for (const pillar of Object.values(pillars)) {
-    for (const role of pillar.roles) {
-      allRoles.push(role);
-    }
+    for (const role of pillar.roles) allRoles.push(role);
   }
 
   const userLevel =
-    answers.experience === "career-changer-exp" ||
-    answers.experience === "early-career"
+    answers.experience === "career-changer-exp" || answers.experience === "early-career"
       ? "entry"
       : answers.experience;
 
@@ -109,14 +83,7 @@ function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
 
   for (const role of allRoles) {
     if (!role.backgroundMatch.includes(answers.background)) continue;
-
-    if (
-      answers.background === "clinician" &&
-      answers.clinicalIntent === "leave-clinical" &&
-      role.clinicianRequired
-    )
-      continue;
-
+    if (answers.background === "clinician" && answers.clinicalIntent === "leave-clinical" && role.clinicianRequired) continue;
     if (role.clinicianRequired && answers.background !== "clinician") continue;
 
     let skillPoints = 0;
@@ -127,7 +94,6 @@ function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
       if (answers.skillsInUse.includes(skill)) skillPoints += 1.0;
       else if (answers.skillsStudying.includes(skill)) skillPoints += 0.5;
     }
-
     for (const skill of role.skillsDesirable) {
       maxPoints += 0.5;
       if (answers.skillsInUse.includes(skill)) skillPoints += 0.5;
@@ -137,31 +103,16 @@ function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
     const skillScore = maxPoints > 0 ? skillPoints / maxPoints : 0;
     const pillarBoost = answers.workPreferences.includes(role.pillar) ? 1 : 0.3;
     const expFit = role.level === "mid" && userLevel === "entry" ? 0.6 : 1.0;
-    const backgroundBonus =
-      answers.background === "nhs-non-clinical" ||
-      answers.background === "clinician"
-        ? 0.05
-        : 0;
+    const backgroundBonus = answers.background === "nhs-non-clinical" || answers.background === "clinician" ? 0.05 : 0;
+    const totalScore = skillScore * 0.6 + pillarBoost * 0.25 + expFit * 0.15 + backgroundBonus;
 
-    const totalScore =
-      skillScore * 0.6 + pillarBoost * 0.25 + expFit * 0.15 + backgroundBonus;
-
-    const gapSkills = role.skillsRequired.filter(
-      (s) =>
-        !answers.skillsInUse.includes(s) &&
-        !answers.skillsStudying.includes(s)
-    );
-    const nearSkills = role.skillsRequired.filter((s) =>
-      answers.skillsStudying.includes(s)
-    );
+    const gapSkills = role.skillsRequired.filter(s => !answers.skillsInUse.includes(s) && !answers.skillsStudying.includes(s));
+    const nearSkills = role.skillsRequired.filter(s => answers.skillsStudying.includes(s));
 
     results.push({
-      role,
-      totalScore,
-      skillScore,
+      role, totalScore, skillScore,
       matchPercent: Math.min(Math.round(totalScore * 100), 99),
-      gapSkills,
-      nearSkills,
+      gapSkills, nearSkills,
     });
   }
 
@@ -171,9 +122,7 @@ function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
 // ── READ SESSION STORAGE ───────────────────────────────────────
 
 function getInitialData(): { answers: UserAnswers | null; matches: MatchedRole[] } {
-  if (typeof window === "undefined") {
-    return { answers: null, matches: [] };
-  }
+  if (typeof window === "undefined") return { answers: null, matches: [] };
   const raw = sessionStorage.getItem("quizAnswers");
   if (!raw) return { answers: null, matches: [] };
   const answers: UserAnswers = JSON.parse(raw);
@@ -197,72 +146,39 @@ function getScoreColor(pct: number) {
 
 function GridBg() {
   return (
-    <div
-      style={{
-        position: "fixed",
-        inset: 0,
-        pointerEvents: "none",
-        zIndex: 0,
-        backgroundImage:
-          "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
-        backgroundSize: "40px 40px",
-      }}
-    />
+    <div style={{
+      position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
+      backgroundImage: "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
+      backgroundSize: "40px 40px",
+    }} />
   );
 }
 
 function Navbar({ showRetake }: { showRetake: boolean }) {
   return (
-    <nav
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        borderBottom: "1px solid #e5e7eb",
-        background: "rgba(255,255,255,0.95)",
-        backdropFilter: "blur(12px)",
-        padding: "0 24px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: "60px",
-      }}
-    >
-      <Link
-        href="/"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          textDecoration: "none",
-        }}
-      >
-        <img
-          src="/logo.png"
-          alt="Logo"
-          style={{ height: 32, width: "auto" }}
-        />
+    <nav style={{
+      position: "sticky", top: 0, zIndex: 50,
+      borderBottom: "1px solid #e5e7eb",
+      background: "rgba(255,255,255,0.95)",
+      backdropFilter: "blur(12px)",
+      padding: "0 24px",
+      display: "flex", alignItems: "center", justifyContent: "space-between",
+      height: "60px",
+    }}>
+      <Link href="/" style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
+        <img src="/logo.png" alt="Logo" style={{ height: 32, width: "auto" }} />
         <span style={{ fontWeight: 700, fontSize: 15, color: "#111720" }}>
           Digital Health Careers Matcher
         </span>
       </Link>
       {showRetake && (
-        <Link
-          href="/quiz"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            background: "transparent",
-            color: "#6b7280",
-            fontSize: 13,
-            fontWeight: 600,
-            padding: "8px 16px",
-            borderRadius: 8,
-            border: "1px solid #e5e7eb",
-            textDecoration: "none",
-          }}
-        >
+        <Link href="/quiz" style={{
+          display: "flex", alignItems: "center", gap: 6,
+          background: "transparent", color: "#6b7280",
+          fontSize: 13, fontWeight: 600,
+          padding: "8px 16px", borderRadius: 8,
+          border: "1px solid #e5e7eb", textDecoration: "none",
+        }}>
           <RotateCcw size={13} /> Retake Quiz
         </Link>
       )}
@@ -275,62 +191,54 @@ function Navbar({ showRetake }: { showRetake: boolean }) {
 export default function ResultsPage() {
   const { answers, matches } = getInitialData();
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [shareId, setShareId] = useState<string | null>(null);
+  const [sharing, setSharing] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    if (!answers || sharing) return;
+    setSharing(true);
+    try {
+      const res = await fetch("/api/save-results", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ answers, matches }),
+      });
+      const data = await res.json();
+      if (data.id) {
+        setShareId(data.id);
+        const url = `${window.location.origin}/results?id=${data.id}`;
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000);
+      }
+    } catch (err) {
+      console.error("Share error:", err);
+    }
+    setSharing(false);
+  };
 
   // ── NO ANSWERS ──
   if (!answers) {
     return (
-      <div
-        style={{
-          background: "#ffffff",
-          minHeight: "100vh",
-          color: "#111720",
-          fontFamily: "system-ui, sans-serif",
-        }}
-      >
+      <div style={{ background: "#ffffff", minHeight: "100vh", color: "#111720", fontFamily: "system-ui, sans-serif" }}>
         <GridBg />
         <Navbar showRetake={false} />
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: "80vh",
-            padding: "24px",
-            position: "relative",
-            zIndex: 1,
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "80vh", padding: "24px", position: "relative", zIndex: 1 }}>
           <div style={{ textAlign: "center", maxWidth: 400 }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>🤔</div>
-            <h2
-              style={{
-                color: "#111720",
-                fontSize: 24,
-                fontWeight: 800,
-                marginBottom: 12,
-              }}
-            >
+            <h2 style={{ color: "#111720", fontSize: 24, fontWeight: 800, marginBottom: 12 }}>
               No quiz answers found
             </h2>
             <p style={{ color: "#6b7280", marginBottom: 24 }}>
-              It looks like you came here directly. Please take the quiz first
-              so we can match you to the right roles.
+              It looks like you came here directly. Please take the quiz first so we can match you to the right roles.
             </p>
-            <Link
-              href="/quiz"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "#0ea5e9",
-                color: "#ffffff",
-                fontWeight: 800,
-                fontSize: 15,
-                padding: "12px 24px",
-                borderRadius: 8,
-                textDecoration: "none",
-              }}
-            >
+            <Link href="/quiz" style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              background: "#0ea5e9", color: "#ffffff",
+              fontWeight: 800, fontSize: 15,
+              padding: "12px 24px", borderRadius: 8, textDecoration: "none",
+            }}>
               Take the Quiz <ArrowRight size={16} />
             </Link>
           </div>
@@ -341,109 +249,84 @@ export default function ResultsPage() {
 
   const topMatch = matches[0];
 
-  // ── RESULTS ──
   return (
-    <div
-      style={{
-        background: "#ffffff",
-        minHeight: "100vh",
-        color: "#111720",
-        fontFamily: "system-ui, sans-serif",
-      }}
-    >
+    <div style={{ background: "#ffffff", minHeight: "100vh", color: "#111720", fontFamily: "system-ui, sans-serif" }}>
       <GridBg />
       <Navbar showRetake={true} />
 
-      <div
-        style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 720,
-          margin: "0 auto",
-          padding: "48px 24px 80px",
-        }}
-      >
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
+
         {/* Hero */}
-        <div
-          style={{
-            background: "linear-gradient(135deg, rgba(14,165,233,0.06), rgba(124,58,237,0.06))",
-            border: "1px solid rgba(14,165,233,0.2)",
-            borderRadius: 16,
-            padding: "36px 32px",
-            marginBottom: 32,
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              top: -40,
-              right: -40,
-              width: 200,
-              height: 200,
-              background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <div
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.15em",
-              color: "#0ea5e9",
-              marginBottom: 12,
-            }}
-          >
+        <div style={{
+          background: "linear-gradient(135deg, rgba(14,165,233,0.06), rgba(124,58,237,0.06))",
+          border: "1px solid rgba(14,165,233,0.2)",
+          borderRadius: 16, padding: "36px 32px", marginBottom: 32,
+          textAlign: "center", position: "relative", overflow: "hidden",
+        }}>
+          <div style={{
+            position: "absolute", top: -40, right: -40, width: 200, height: 200,
+            background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)",
+            pointerEvents: "none",
+          }} />
+          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.15em", color: "#0ea5e9", marginBottom: 12 }}>
             Your Results
           </div>
-          <h1
-            style={{
-              fontSize: "clamp(22px, 4vw, 34px)",
-              fontWeight: 800,
-              color: "#111720",
-              lineHeight: 1.2,
-              marginBottom: 10,
-              letterSpacing: "-0.02em",
-            }}
-          >
+          <h1 style={{ fontSize: "clamp(22px, 4vw, 34px)", fontWeight: 800, color: "#111720", lineHeight: 1.2, marginBottom: 10, letterSpacing: "-0.02em" }}>
             {matches.length > 0
               ? `We found ${matches.length} roles that match your profile`
               : "No strong matches found"}
           </h1>
           {topMatch && (
-            <p style={{ fontSize: 15, color: "#6b7280", maxWidth: 480, margin: "0 auto" }}>
+            <p style={{ fontSize: 15, color: "#6b7280", maxWidth: 480, margin: "0 auto 20px" }}>
               Your top match is{" "}
               <strong style={{ color: "#111720" }}>{topMatch.role.title}</strong>{" "}
               with a{" "}
-              <strong style={{ color: "#0ea5e9" }}>
-                {topMatch.matchPercent}% match
-              </strong>
-              . Scroll down to see all your results.
+              <strong style={{ color: "#0ea5e9" }}>{topMatch.matchPercent}% match</strong>.
+              Scroll down to see all your results.
             </p>
           )}
+
+          {/* Share button */}
+          {matches.length > 0 && (
+            <button
+              onClick={handleShare}
+              disabled={sharing}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: copied ? "#10b981" : "#f9fafb",
+                color: copied ? "#ffffff" : "#111720",
+                fontWeight: 700, fontSize: 14,
+                padding: "10px 20px", borderRadius: 8,
+                border: `1px solid ${copied ? "#10b981" : "#e5e7eb"}`,
+                cursor: sharing ? "wait" : "pointer",
+                transition: "all 0.2s",
+              }}
+            >
+              {copied ? <><Check size={15} /> Link copied!</> : sharing ? "Generating link..." : <><Share2 size={15} /> Share my results</>}
+            </button>
+          )}
+
+          {shareId && (
+            <div style={{
+              marginTop: 12, fontSize: 12, color: "#6b7280",
+              padding: "8px 14px", background: "#f9fafb",
+              border: "1px solid #e5e7eb", borderRadius: 8,
+            }}>
+              Share link: <strong style={{ color: "#0ea5e9" }}>{window.location.origin}/results?id={shareId}</strong>
+            </div>
+          )}
+
           {matches.length === 0 && (
             <div style={{ marginTop: 20 }}>
               <p style={{ color: "#6b7280", marginBottom: 16 }}>
                 Try selecting more skills or a different background to broaden your results.
               </p>
-              <Link
-                href="/quiz"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 8,
-                  background: "#0ea5e9",
-                  color: "#ffffff",
-                  fontWeight: 800,
-                  fontSize: 14,
-                  padding: "10px 20px",
-                  borderRadius: 8,
-                  textDecoration: "none",
-                }}
-              >
+              <Link href="/quiz" style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                background: "#0ea5e9", color: "#ffffff",
+                fontWeight: 800, fontSize: 14,
+                padding: "10px 20px", borderRadius: 8, textDecoration: "none",
+              }}>
                 Retake Quiz <ArrowRight size={14} />
               </Link>
             </div>
@@ -460,30 +343,18 @@ export default function ResultsPage() {
             const scoreColor = getScoreColor(matchPercent);
 
             return (
-              <div
-                key={role.id}
-                style={{
-                  background: "#f9fafb",
-                  border: index === 0
-                    ? `1px solid rgba(${pillarConfig[role.pillar]?.rgb || "14,165,233"},0.4)`
-                    : "1px solid #e5e7eb",
-                  borderRadius: 14,
-                  overflow: "hidden",
-                }}
-              >
+              <div key={role.id} style={{
+                background: "#f9fafb",
+                border: index === 0 ? `1px solid rgba(${pillar.rgb},0.4)` : "1px solid #e5e7eb",
+                borderRadius: 14, overflow: "hidden",
+              }}>
                 {index === 0 && (
-                  <div
-                    style={{
-                      background: "linear-gradient(to right, rgba(14,165,233,0.1), rgba(124,58,237,0.06))",
-                      padding: "6px 20px",
-                      fontSize: 11,
-                      fontWeight: 700,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
-                      color: "#0ea5e9",
-                      borderBottom: "1px solid rgba(14,165,233,0.15)",
-                    }}
-                  >
+                  <div style={{
+                    background: "linear-gradient(to right, rgba(14,165,233,0.1), rgba(124,58,237,0.06))",
+                    padding: "6px 20px", fontSize: 11, fontWeight: 700,
+                    textTransform: "uppercase", letterSpacing: "0.1em",
+                    color: "#0ea5e9", borderBottom: "1px solid rgba(14,165,233,0.15)",
+                  }}>
                     ⭐ Top Match
                   </div>
                 )}
@@ -491,50 +362,27 @@ export default function ResultsPage() {
                 <div style={{ padding: "20px 24px" }}>
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, minWidth: 200 }}>
-                      <div
-                        style={{
-                          width: 44,
-                          height: 44,
-                          borderRadius: 10,
-                          flexShrink: 0,
-                          background: `rgba(${pillar.rgb},0.1)`,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          border: `1px solid rgba(${pillar.rgb},0.2)`,
-                        }}
-                      >
+                      <div style={{
+                        width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+                        background: `rgba(${pillar.rgb},0.1)`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        border: `1px solid rgba(${pillar.rgb},0.2)`,
+                      }}>
                         <PillarIcon size={20} color={pillar.color} />
                       </div>
                       <div>
-                        <div
-                          style={{
-                            fontWeight: 800,
-                            fontSize: 16,
-                            color: "#111720",
-                            marginBottom: 4,
-                            lineHeight: 1.2,
-                          }}
-                        >
+                        <div style={{ fontWeight: 800, fontSize: 16, color: "#111720", marginBottom: 4, lineHeight: 1.2 }}>
                           {role.title}
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-                          <span
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 600,
-                              padding: "2px 8px",
-                              borderRadius: 100,
-                              background: `rgba(${pillar.rgb},0.1)`,
-                              color: pillar.color,
-                              border: `1px solid rgba(${pillar.rgb},0.2)`,
-                            }}
-                          >
+                          <span style={{
+                            fontSize: 11, fontWeight: 600, padding: "2px 8px", borderRadius: 100,
+                            background: `rgba(${pillar.rgb},0.1)`, color: pillar.color,
+                            border: `1px solid rgba(${pillar.rgb},0.2)`,
+                          }}>
                             {pillar.label}
                           </span>
-                          <span style={{ fontSize: 12, color: "#6b7280" }}>
-                            NHS Band {role.nhsBand}
-                          </span>
+                          <span style={{ fontSize: 12, color: "#6b7280" }}>NHS Band {role.nhsBand}</span>
                           <span style={{ fontSize: 12, color: "#6b7280" }}>
                             {formatSalary(role.salaryBand.low)} – {formatSalary(role.salaryBand.high)}
                           </span>
@@ -550,131 +398,62 @@ export default function ResultsPage() {
                     </div>
                   </div>
 
-                  {/* Score bar */}
-                  <div
-                    style={{
-                      height: 4,
-                      background: "#e5e7eb",
+                  <div style={{ height: 4, background: "#e5e7eb", borderRadius: 100, marginTop: 16, overflow: "hidden" }}>
+                    <div style={{
+                      height: "100%", width: `${matchPercent}%`,
+                      background: `linear-gradient(to right, ${scoreColor}, ${scoreColor}aa)`,
                       borderRadius: 100,
-                      marginTop: 16,
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: "100%",
-                        width: `${matchPercent}%`,
-                        background: `linear-gradient(to right, ${scoreColor}, ${scoreColor}aa)`,
-                        borderRadius: 100,
-                      }}
-                    />
+                    }} />
                   </div>
 
-                  {/* Expand toggle */}
                   <button
                     onClick={() => setExpandedId(isExpanded ? null : role.id)}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 6,
-                      marginTop: 14,
-                      padding: "6px 0",
-                      background: "transparent",
-                      border: "none",
-                      color: "#6b7280",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      cursor: "pointer",
+                      display: "flex", alignItems: "center", gap: 6,
+                      marginTop: 14, padding: "6px 0",
+                      background: "transparent", border: "none",
+                      color: "#6b7280", fontSize: 13, fontWeight: 600, cursor: "pointer",
                     }}
                   >
-                    {isExpanded ? (
-                      <><ChevronUp size={15} /> Hide details</>
-                    ) : (
-                      <><ChevronDown size={15} /> View full details, skills gap &amp; certifications</>
-                    )}
+                    {isExpanded
+                      ? <><ChevronUp size={15} /> Hide details</>
+                      : <><ChevronDown size={15} /> View full details, skills gap &amp; certifications</>
+                    }
                   </button>
                 </div>
 
-                {/* Expanded detail */}
                 {isExpanded && (
                   <div style={{ borderTop: "1px solid #e5e7eb", padding: "24px", background: "#ffffff" }}>
                     <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.7, marginBottom: 24 }}>
                       {role.description}
                     </p>
 
-                    <div
-                      style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-                        gap: 20,
-                      }}
-                    >
-                      {/* Skills you have */}
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 20 }}>
+
                       <div>
-                        <div
-                          style={{
-                            fontSize: 11,
-                            fontWeight: 700,
-                            textTransform: "uppercase",
-                            letterSpacing: "0.1em",
-                            color: "#10b981",
-                            marginBottom: 10,
-                          }}
-                        >
+                        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#10b981", marginBottom: 10 }}>
                           ✅ Skills you have
                         </div>
                         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                          {role.skillsRequired
-                            .filter((s) => answers.skillsInUse.includes(s))
-                            .map((s) => (
-                              <span
-                                key={s}
-                                style={{
-                                  fontSize: 12,
-                                  padding: "3px 10px",
-                                  borderRadius: 100,
-                                  background: "rgba(16,185,129,0.08)",
-                                  color: "#10b981",
-                                  border: "1px solid rgba(16,185,129,0.2)",
-                                }}
-                              >
-                                {s}
-                              </span>
-                            ))}
-                          {role.skillsRequired.filter((s) => answers.skillsInUse.includes(s)).length === 0 && (
+                          {role.skillsRequired.filter(s => answers.skillsInUse.includes(s)).map(s => (
+                            <span key={s} style={{ fontSize: 12, padding: "3px 10px", borderRadius: 100, background: "rgba(16,185,129,0.08)", color: "#10b981", border: "1px solid rgba(16,185,129,0.2)" }}>
+                              {s}
+                            </span>
+                          ))}
+                          {role.skillsRequired.filter(s => answers.skillsInUse.includes(s)).length === 0 && (
                             <span style={{ fontSize: 13, color: "#9ca3af" }}>None matched yet</span>
                           )}
                         </div>
                       </div>
 
-                      {/* Currently studying */}
                       {nearSkills.length > 0 && (
                         <div>
-                          <div
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 700,
-                              textTransform: "uppercase",
-                              letterSpacing: "0.1em",
-                              color: "#f59e0b",
-                              marginBottom: 10,
-                            }}
-                          >
+                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#f59e0b", marginBottom: 10 }}>
                             📖 Currently studying
                           </div>
                           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                            {nearSkills.map((s) => (
-                              <span
-                                key={s}
-                                style={{
-                                  fontSize: 12,
-                                  padding: "3px 10px",
-                                  borderRadius: 100,
-                                  background: "rgba(245,158,11,0.08)",
-                                  color: "#f59e0b",
-                                  border: "1px solid rgba(245,158,11,0.2)",
-                                }}
-                              >
+                            {nearSkills.map(s => (
+                              <span key={s} style={{ fontSize: 12, padding: "3px 10px", borderRadius: 100, background: "rgba(245,158,11,0.08)", color: "#f59e0b", border: "1px solid rgba(245,158,11,0.2)" }}>
                                 {s}
                               </span>
                             ))}
@@ -682,34 +461,14 @@ export default function ResultsPage() {
                         </div>
                       )}
 
-                      {/* Skills to develop */}
                       {gapSkills.length > 0 && (
                         <div>
-                          <div
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 700,
-                              textTransform: "uppercase",
-                              letterSpacing: "0.1em",
-                              color: "#f43f5e",
-                              marginBottom: 10,
-                            }}
-                          >
+                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#f43f5e", marginBottom: 10 }}>
                             🎯 Skills to develop
                           </div>
                           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                            {gapSkills.map((s) => (
-                              <span
-                                key={s}
-                                style={{
-                                  fontSize: 12,
-                                  padding: "3px 10px",
-                                  borderRadius: 100,
-                                  background: "rgba(244,63,94,0.06)",
-                                  color: "#f43f5e",
-                                  border: "1px solid rgba(244,63,94,0.2)",
-                                }}
-                              >
+                            {gapSkills.map(s => (
+                              <span key={s} style={{ fontSize: 12, padding: "3px 10px", borderRadius: 100, background: "rgba(244,63,94,0.06)", color: "#f43f5e", border: "1px solid rgba(244,63,94,0.2)" }}>
                                 {s}
                               </span>
                             ))}
@@ -717,34 +476,14 @@ export default function ResultsPage() {
                         </div>
                       )}
 
-                      {/* Certifications */}
                       {role.certifications.length > 0 && (
                         <div>
-                          <div
-                            style={{
-                              fontSize: 11,
-                              fontWeight: 700,
-                              textTransform: "uppercase",
-                              letterSpacing: "0.1em",
-                              color: "#8b5cf6",
-                              marginBottom: 10,
-                            }}
-                          >
+                          <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#8b5cf6", marginBottom: 10 }}>
                             🏆 Recommended certifications
                           </div>
                           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                            {role.certifications.map((cert) => (
-                              <div
-                                key={cert}
-                                style={{
-                                  fontSize: 12,
-                                  padding: "6px 12px",
-                                  borderRadius: 8,
-                                  background: "rgba(139,92,246,0.06)",
-                                  color: "#7c3aed",
-                                  border: "1px solid rgba(139,92,246,0.2)",
-                                }}
-                              >
+                            {role.certifications.map(cert => (
+                              <div key={cert} style={{ fontSize: 12, padding: "6px 12px", borderRadius: 8, background: "rgba(139,92,246,0.06)", color: "#7c3aed", border: "1px solid rgba(139,92,246,0.2)" }}>
                                 {cert}
                               </div>
                             ))}
@@ -753,64 +492,24 @@ export default function ResultsPage() {
                       )}
                     </div>
 
-                    {/* Footer row */}
-                    <div
-                      style={{
-                        marginTop: 20,
-                        paddingTop: 20,
-                        borderTop: "1px solid #e5e7eb",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        flexWrap: "wrap",
-                        gap: 12,
-                      }}
-                    >
+                    <div style={{ marginTop: 20, paddingTop: 20, borderTop: "1px solid #e5e7eb", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
                       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                        <span
-                          style={{
-                            fontSize: 12,
-                            padding: "4px 12px",
-                            borderRadius: 6,
-                            background: role.level === "entry"
-                              ? "rgba(16,185,129,0.08)"
-                              : "rgba(245,158,11,0.08)",
-                            color: role.level === "entry" ? "#10b981" : "#f59e0b",
-                            border: `1px solid ${role.level === "entry" ? "rgba(16,185,129,0.2)" : "rgba(245,158,11,0.2)"}`,
-                            fontWeight: 600,
-                          }}
-                        >
+                        <span style={{
+                          fontSize: 12, padding: "4px 12px", borderRadius: 6, fontWeight: 600,
+                          background: role.level === "entry" ? "rgba(16,185,129,0.08)" : "rgba(245,158,11,0.08)",
+                          color: role.level === "entry" ? "#10b981" : "#f59e0b",
+                          border: `1px solid ${role.level === "entry" ? "rgba(16,185,129,0.2)" : "rgba(245,158,11,0.2)"}`,
+                        }}>
                           {role.level === "entry" ? "Entry level" : "Mid level"}
                         </span>
-                        <span
-                          style={{
-                            fontSize: 12,
-                            padding: "4px 12px",
-                            borderRadius: 6,
-                            background: "rgba(14,165,233,0.08)",
-                            color: "#0ea5e9",
-                            border: "1px solid rgba(14,165,233,0.2)",
-                            fontWeight: 600,
-                          }}
-                        >
+                        <span style={{ fontSize: 12, padding: "4px 12px", borderRadius: 6, background: "rgba(14,165,233,0.08)", color: "#0ea5e9", border: "1px solid rgba(14,165,233,0.2)", fontWeight: 600 }}>
                           Band {role.nhsBand}
                         </span>
                       </div>
                       <Link
                         href={`https://www.jobs.nhs.uk/candidate/search/results?keyword=${encodeURIComponent(role.title)}`}
                         target="_blank"
-                        style={{
-                          display: "inline-flex",
-                          alignItems: "center",
-                          gap: 6,
-                          fontSize: 13,
-                          fontWeight: 700,
-                          color: "#ffffff",
-                          background: "#0ea5e9",
-                          padding: "8px 16px",
-                          borderRadius: 8,
-                          textDecoration: "none",
-                        }}
+                        style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 700, color: "#ffffff", background: "#0ea5e9", padding: "8px 16px", borderRadius: 8, textDecoration: "none" }}
                       >
                         Search NHS Jobs <ArrowRight size={13} />
                       </Link>
@@ -824,35 +523,11 @@ export default function ResultsPage() {
 
         {/* Retake CTA */}
         {matches.length > 0 && (
-          <div
-            style={{
-              marginTop: 40,
-              textAlign: "center",
-              padding: "32px",
-              background: "#f9fafb",
-              border: "1px solid #e5e7eb",
-              borderRadius: 12,
-            }}
-          >
+          <div style={{ marginTop: 40, textAlign: "center", padding: "32px", background: "#f9fafb", border: "1px solid #e5e7eb", borderRadius: 12 }}>
             <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 16 }}>
               Not seeing what you expected? Try updating your skills or changing your preferences.
             </p>
-            <Link
-              href="/quiz"
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                background: "transparent",
-                color: "#111720",
-                fontWeight: 700,
-                fontSize: 14,
-                padding: "10px 20px",
-                borderRadius: 8,
-                border: "1px solid #e5e7eb",
-                textDecoration: "none",
-              }}
-            >
+            <Link href="/quiz" style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "transparent", color: "#111720", fontWeight: 700, fontSize: 14, padding: "10px 20px", borderRadius: 8, border: "1px solid #e5e7eb", textDecoration: "none" }}>
               <RotateCcw size={14} /> Retake the Quiz
             </Link>
           </div>

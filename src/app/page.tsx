@@ -72,13 +72,6 @@ const pillars = [
   },
 ];
 
-const stats = [
-  { value: "98", label: "Digital roles mapped" },
-  { value: "5", label: "Career pillars" },
-  { value: "51", label: "Skills assessed" },
-  { value: "2 min", label: "To get matched" },
-];
-
 const howItWorks = [
   {
     step: "01",
@@ -108,11 +101,30 @@ const howItWorks = [
 
 export default function LandingPage() {
   const [visible, setVisible] = useState(false);
+  const [userCount, setUserCount] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
   }, []);
+
+  useEffect(() => {
+    fetch("/api/get-counter")
+      .then((res) => res.json())
+      .then((data) => setUserCount(data.count))
+      .catch(() => setUserCount(null));
+  }, []);
+
+  const stats = [
+    { value: "98", label: "Digital roles mapped" },
+    { value: "5", label: "Career pillars" },
+    { value: "51", label: "Skills assessed" },
+    {
+      value: userCount !== null ? userCount.toLocaleString("en-GB") : "...",
+      label: "Professionals matched",
+      live: true,
+    },
+  ];
 
   return (
     <div style={{ background: "#ffffff", minHeight: "100vh", color: "#111720", fontFamily: "system-ui, sans-serif" }}>
@@ -147,12 +159,7 @@ export default function LandingPage() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <Image
-            src="/logo.png"
-            alt="Ufuoma O. logo"
-            width={32}
-            height={32}
-          />
+          <Image src="/logo.png" alt="Ufuoma O. logo" width={32} height={32} />
           <span style={{ fontWeight: 700, fontSize: 15, color: "#111720" }}>
             Digital Health Careers Matcher
           </span>
@@ -190,7 +197,6 @@ export default function LandingPage() {
           transition: "opacity 0.7s ease, transform 0.7s ease",
         }}
       >
-        {/* Glow blob */}
         <div
           style={{
             position: "absolute",
@@ -260,14 +266,7 @@ export default function LandingPage() {
           grades and a clear path to get there.
         </p>
 
-        <div
-          style={{
-            display: "flex",
-            gap: 12,
-            justifyContent: "center",
-            flexWrap: "wrap",
-          }}
-        >
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <Link
             href="/quiz"
             style={{
@@ -337,9 +336,25 @@ export default function LandingPage() {
                   color: "#0ea5e9",
                   lineHeight: 1,
                   marginBottom: 6,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
                 }}
               >
                 {s.value}
+                {"live" in s && s.live && (
+                  <span
+                    style={{
+                      width: 8,
+                      height: 8,
+                      borderRadius: "50%",
+                      background: "#10b981",
+                      display: "inline-block",
+                      boxShadow: "0 0 6px rgba(16,185,129,0.6)",
+                    }}
+                  />
+                )}
               </div>
               <div style={{ fontSize: 13, color: "#6b7280" }}>{s.label}</div>
             </div>
@@ -359,37 +374,13 @@ export default function LandingPage() {
         }}
       >
         <div style={{ textAlign: "center", marginBottom: 48 }}>
-          <p
-            style={{
-              fontSize: 11,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "#0ea5e9",
-              marginBottom: 12,
-            }}
-          >
+          <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
             The Framework
           </p>
-          <h2
-            style={{
-              fontSize: "clamp(24px, 4vw, 40px)",
-              fontWeight: 800,
-              color: "#111720",
-              letterSpacing: "-0.02em",
-              marginBottom: 12,
-            }}
-          >
+          <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em", marginBottom: 12 }}>
             5 Pillars of Digital Health
           </h2>
-          <p
-            style={{
-              fontSize: 16,
-              color: "#6b7280",
-              maxWidth: 480,
-              margin: "0 auto",
-              lineHeight: 1.7,
-            }}
-          >
+          <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
             Every digital health role sits within one of these five domains.{" "}
             <a
               href="https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6"
@@ -399,74 +390,36 @@ export default function LandingPage() {
             >
               Watch a free course explaining the 5 pillars of digital health
             </a>{" "}
-            — your quiz results map you to the pillar and the specific roles
-            that suit you best.
+            — your quiz results map you to the pillar and the specific roles that suit you best.
           </p>
         </div>
 
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: 16,
-          }}
-        >
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
           {pillars.map((p) => {
             const Icon = p.icon;
             return (
               <div
                 key={p.id}
-                style={{
-                  background: p.bg,
-                  border: `1px solid ${p.border}`,
-                  borderRadius: 12,
-                  padding: "24px",
-                }}
+                style={{ background: p.bg, border: `1px solid ${p.border}`, borderRadius: 12, padding: "24px" }}
               >
                 <div
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 10,
+                    width: 44, height: 44, borderRadius: 10,
                     background: `rgba(${p.iconRgb},0.1)`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
+                    display: "flex", alignItems: "center", justifyContent: "center",
                     marginBottom: 16,
                   }}
                 >
                   <Icon size={22} color={p.color} />
                 </div>
+                <div style={{ fontWeight: 700, fontSize: 16, color: "#111720", marginBottom: 6 }}>{p.label}</div>
+                <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.6, marginBottom: 16 }}>{p.description}</div>
                 <div
                   style={{
-                    fontWeight: 700,
-                    fontSize: 16,
-                    color: "#111720",
-                    marginBottom: 6,
-                  }}
-                >
-                  {p.label}
-                </div>
-                <div
-                  style={{
-                    fontSize: 13,
-                    color: "#6b7280",
-                    lineHeight: 1.6,
-                    marginBottom: 16,
-                  }}
-                >
-                  {p.description}
-                </div>
-                <div
-                  style={{
-                    display: "inline-block",
-                    fontSize: 11,
-                    fontWeight: 700,
-                    padding: "3px 10px",
-                    borderRadius: 100,
+                    display: "inline-block", fontSize: 11, fontWeight: 700,
+                    padding: "3px 10px", borderRadius: 100,
                     background: `rgba(${p.iconRgb},0.08)`,
-                    color: p.color,
-                    border: `1px solid ${p.border}`,
+                    color: p.color, border: `1px solid ${p.border}`,
                   }}
                 >
                   {p.roles} roles mapped
@@ -489,62 +442,22 @@ export default function LandingPage() {
       >
         <div style={{ maxWidth: 960, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <p
-              style={{
-                fontSize: 11,
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: "#0ea5e9",
-                marginBottom: 12,
-              }}
-            >
+            <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
               How It Works
             </p>
-            <h2
-              style={{
-                fontSize: "clamp(24px, 4vw, 40px)",
-                fontWeight: 800,
-                color: "#111720",
-                letterSpacing: "-0.02em",
-              }}
-            >
+            <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em" }}>
               Four steps to clarity
             </h2>
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-              gap: 24,
-            }}
-          >
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 24 }}>
             {howItWorks.map((item, i) => (
               <div key={i}>
-                <div
-                  style={{
-                    fontSize: 48,
-                    fontWeight: 800,
-                    color: "rgba(14,165,233,0.15)",
-                    lineHeight: 1,
-                    marginBottom: 12,
-                  }}
-                >
+                <div style={{ fontSize: 48, fontWeight: 800, color: "rgba(14,165,233,0.15)", lineHeight: 1, marginBottom: 12 }}>
                   {item.step}
                 </div>
-                <div
-                  style={{
-                    fontWeight: 700,
-                    fontSize: 15,
-                    color: "#111720",
-                    marginBottom: 8,
-                  }}
-                >
-                  {item.title}
-                </div>
-                <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.7 }}>
-                  {item.detail}
-                </div>
+                <div style={{ fontWeight: 700, fontSize: 15, color: "#111720", marginBottom: 8 }}>{item.title}</div>
+                <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.7 }}>{item.detail}</div>
               </div>
             ))}
           </div>
@@ -572,60 +485,18 @@ export default function LandingPage() {
             overflow: "hidden",
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              top: -60,
-              right: -60,
-              width: 240,
-              height: 240,
-              background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              bottom: -60,
-              left: -60,
-              width: 240,
-              height: 240,
-              background: "radial-gradient(circle, rgba(124,58,237,0.07), transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <p
-            style={{
-              fontSize: 12,
-              letterSpacing: "0.15em",
-              textTransform: "uppercase",
-              color: "#0ea5e9",
-              marginBottom: 16,
-            }}
-          >
+          <div style={{ position: "absolute", top: -60, right: -60, width: 240, height: 240, background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)", pointerEvents: "none" }} />
+          <div style={{ position: "absolute", bottom: -60, left: -60, width: 240, height: 240, background: "radial-gradient(circle, rgba(124,58,237,0.07), transparent 70%)", pointerEvents: "none" }} />
+          <p style={{ fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 16 }}>
             Free · Takes 2 minutes · No sign up required
           </p>
-          <h2
-            style={{
-              fontSize: "clamp(24px, 4vw, 42px)",
-              fontWeight: 800,
-              color: "#111720",
-              letterSpacing: "-0.02em",
-              marginBottom: 16,
-            }}
-          >
+          <h2 style={{ fontSize: "clamp(24px, 4vw, 42px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em", marginBottom: 16 }}>
             Ready to find your role?
           </h2>
-          <p
-            style={{
-              fontSize: 16,
-              color: "#6b7280",
-              maxWidth: 420,
-              margin: "0 auto 32px",
-            }}
-          >
-            Join thousands of NHS professionals who have used this tool to find
-            their next step in digital health.
+          <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 420, margin: "0 auto 32px" }}>
+            {userCount !== null && userCount > 0
+              ? `Join ${userCount.toLocaleString("en-GB")} NHS professionals who have used this tool to find their next step in digital health.`
+              : "Join NHS professionals who have used this tool to find their next step in digital health."}
           </p>
           <Link
             href="/quiz"
