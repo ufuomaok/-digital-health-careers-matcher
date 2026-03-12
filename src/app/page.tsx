@@ -107,7 +107,7 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/visit-counter", { method: "POST" })
+    fetch("/api/visit-counter")
       .then((res) => res.json())
       .then((data) => setVisitCount(data.count))
       .catch(() => setVisitCount(null));
