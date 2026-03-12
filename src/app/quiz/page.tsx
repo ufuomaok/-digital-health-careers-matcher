@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, ArrowLeft, Activity, Check } from "lucide-react";
+import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -278,9 +278,9 @@ export default function QuizPage() {
   return (
     <div
       style={{
-        background: "#0a0e14",
+        background: "#ffffff",
         minHeight: "100vh",
-        color: "#e2eaf4",
+        color: "#111720",
         fontFamily: "system-ui, sans-serif",
       }}
     >
@@ -292,7 +292,7 @@ export default function QuizPage() {
           pointerEvents: "none",
           zIndex: 0,
           backgroundImage:
-            "linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px)",
+            "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
           backgroundSize: "40px 40px",
         }}
       />
@@ -303,8 +303,8 @@ export default function QuizPage() {
           position: "sticky",
           top: 0,
           zIndex: 50,
-          borderBottom: "1px solid #1e2d3f",
-          background: "rgba(10,14,20,0.9)",
+          borderBottom: "1px solid #e5e7eb",
+          background: "rgba(255,255,255,0.95)",
           backdropFilter: "blur(12px)",
           padding: "0 24px",
           display: "flex",
@@ -322,39 +322,31 @@ export default function QuizPage() {
             textDecoration: "none",
           }}
         >
-          <div
-            style={{
-              width: 32,
-              height: 32,
-              borderRadius: 8,
-              background: "linear-gradient(135deg, #00e5ff, #7c3aed)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Activity size={16} color="#0a0e14" />
-          </div>
-          <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
+          <img
+            src="/logo.png"
+            alt="Logo"
+            style={{ height: 32, width: "auto" }}
+          />
+          <span style={{ fontWeight: 700, fontSize: 15, color: "#111720" }}>
             Digital Health Careers Matcher
           </span>
         </Link>
 
-        <div style={{ fontSize: 13, color: "#6b8097" }}>
+        <div style={{ fontSize: 13, color: "#6b7280" }}>
           Step{" "}
-          <span style={{ color: "#00e5ff", fontWeight: 700 }}>{step}</span>
+          <span style={{ color: "#0ea5e9", fontWeight: 700 }}>{step}</span>
           {" "}of{" "}
           {totalSteps}
         </div>
       </nav>
 
       {/* Progress bar */}
-      <div style={{ height: 3, background: "#1e2d3f", position: "relative", zIndex: 40 }}>
+      <div style={{ height: 3, background: "#e5e7eb", position: "relative", zIndex: 40 }}>
         <div
           style={{
             height: "100%",
             width: `${progress}%`,
-            background: "linear-gradient(to right, #00e5ff, #7c3aed)",
+            background: "linear-gradient(to right, #0ea5e9, #7c3aed)",
             transition: "width 0.4s ease",
           }}
         />
@@ -456,7 +448,7 @@ export default function QuizPage() {
               style={{
                 display: "flex",
                 marginBottom: 24,
-                border: "1px solid #1e2d3f",
+                border: "1px solid #e5e7eb",
                 borderRadius: 10,
                 overflow: "hidden",
               }}
@@ -476,18 +468,18 @@ export default function QuizPage() {
                     background:
                       activeSkillTab === tab
                         ? tab === "inUse"
-                          ? "rgba(0,229,255,0.12)"
-                          : "rgba(139,92,246,0.12)"
-                        : "#111720",
+                          ? "rgba(14,165,233,0.08)"
+                          : "rgba(139,92,246,0.08)"
+                        : "#f9fafb",
                     color:
                       activeSkillTab === tab
                         ? tab === "inUse"
-                          ? "#00e5ff"
+                          ? "#0ea5e9"
                           : "#8b5cf6"
-                        : "#6b8097",
+                        : "#6b7280",
                     borderBottom:
                       activeSkillTab === tab
-                        ? `2px solid ${tab === "inUse" ? "#00e5ff" : "#8b5cf6"}`
+                        ? `2px solid ${tab === "inUse" ? "#0ea5e9" : "#8b5cf6"}`
                         : "2px solid transparent",
                   }}
                 >
@@ -507,7 +499,7 @@ export default function QuizPage() {
                     fontWeight: 700,
                     textTransform: "uppercase",
                     letterSpacing: "0.12em",
-                    color: "#6b8097",
+                    color: "#6b7280",
                     marginBottom: 10,
                   }}
                 >
@@ -536,31 +528,31 @@ export default function QuizPage() {
                           cursor: "pointer",
                           border: isSelected
                             ? activeSkillTab === "inUse"
-                              ? "1px solid #00e5ff"
+                              ? "1px solid #0ea5e9"
                               : "1px solid #8b5cf6"
                             : inUse
-                            ? "1px solid rgba(0,229,255,0.3)"
+                            ? "1px solid rgba(14,165,233,0.4)"
                             : studying
-                            ? "1px solid rgba(139,92,246,0.3)"
-                            : "1px solid #1e2d3f",
+                            ? "1px solid rgba(139,92,246,0.4)"
+                            : "1px solid #e5e7eb",
                           background: isSelected
                             ? activeSkillTab === "inUse"
-                              ? "rgba(0,229,255,0.12)"
-                              : "rgba(139,92,246,0.12)"
+                              ? "rgba(14,165,233,0.08)"
+                              : "rgba(139,92,246,0.08)"
                             : inUse
-                            ? "rgba(0,229,255,0.05)"
+                            ? "rgba(14,165,233,0.04)"
                             : studying
-                            ? "rgba(139,92,246,0.05)"
-                            : "#111720",
+                            ? "rgba(139,92,246,0.04)"
+                            : "#f9fafb",
                           color: isSelected
                             ? activeSkillTab === "inUse"
-                              ? "#00e5ff"
+                              ? "#0ea5e9"
                               : "#8b5cf6"
                             : inUse
-                            ? "rgba(0,229,255,0.6)"
+                            ? "rgba(14,165,233,0.8)"
                             : studying
-                            ? "rgba(139,92,246,0.6)"
-                            : "#6b8097",
+                            ? "rgba(139,92,246,0.8)"
+                            : "#6b7280",
                           transition: "all 0.15s",
                         }}
                       >
@@ -578,11 +570,12 @@ export default function QuizPage() {
             <div
               style={{
                 fontSize: 12,
-                color: "#3a5068",
+                color: "#6b7280",
                 marginTop: 8,
                 padding: "10px 14px",
-                border: "1px solid #1e2d3f",
+                border: "1px solid #e5e7eb",
                 borderRadius: 8,
+                background: "#f9fafb",
               }}
             >
               💡 Switch between the tabs to mark skills you use day-to-day vs ones you are currently studying or working towards.
@@ -612,8 +605,8 @@ export default function QuizPage() {
                       gap: 16,
                       padding: "16px 20px",
                       borderRadius: 12,
-                      border: selected ? `1px solid ${opt.color}` : "1px solid #1e2d3f",
-                      background: selected ? `rgba(${opt.rgb},0.08)` : "#111720",
+                      border: selected ? `1px solid ${opt.color}` : "1px solid #e5e7eb",
+                      background: selected ? `rgba(${opt.rgb},0.06)` : "#f9fafb",
                       cursor: maxReached ? "not-allowed" : "pointer",
                       opacity: maxReached ? 0.4 : 1,
                       textAlign: "left",
@@ -627,13 +620,13 @@ export default function QuizPage() {
                         style={{
                           fontWeight: 700,
                           fontSize: 15,
-                          color: selected ? opt.color : "#fff",
+                          color: selected ? opt.color : "#111720",
                           marginBottom: 2,
                         }}
                       >
                         {opt.label}
                       </div>
-                      <div style={{ fontSize: 13, color: "#6b8097" }}>{opt.detail}</div>
+                      <div style={{ fontSize: 13, color: "#6b7280" }}>{opt.detail}</div>
                     </div>
                     {selected && (
                       <div
@@ -648,7 +641,7 @@ export default function QuizPage() {
                           flexShrink: 0,
                         }}
                       >
-                        <Check size={13} color="#0a0e14" />
+                        <Check size={13} color="#ffffff" />
                       </div>
                     )}
                   </button>
@@ -681,7 +674,7 @@ export default function QuizPage() {
             alignItems: "center",
             marginTop: 40,
             paddingTop: 24,
-            borderTop: "1px solid #1e2d3f",
+            borderTop: "1px solid #e5e7eb",
           }}
         >
           <button
@@ -692,9 +685,9 @@ export default function QuizPage() {
               gap: 8,
               padding: "12px 20px",
               borderRadius: 8,
-              border: "1px solid #1e2d3f",
+              border: "1px solid #e5e7eb",
               background: "transparent",
-              color: step === 1 ? "#3a5068" : "#e2eaf4",
+              color: step === 1 ? "#d1d5db" : "#111720",
               fontSize: 14,
               fontWeight: 600,
               cursor: step === 1 ? "not-allowed" : "pointer",
@@ -715,14 +708,14 @@ export default function QuizPage() {
               borderRadius: 8,
               border: "none",
               background: canProceed()
-                ? "linear-gradient(135deg, #00e5ff, #0ea5e9)"
-                : "#1e2d3f",
-              color: canProceed() ? "#0a0e14" : "#3a5068",
+                ? "linear-gradient(135deg, #0ea5e9, #7c3aed)"
+                : "#e5e7eb",
+              color: canProceed() ? "#ffffff" : "#9ca3af",
               fontSize: 15,
               fontWeight: 800,
               cursor: canProceed() ? "pointer" : "not-allowed",
               transition: "all 0.2s",
-              boxShadow: canProceed() ? "0 0 20px rgba(0,229,255,0.2)" : "none",
+              boxShadow: canProceed() ? "0 4px 14px rgba(14,165,233,0.3)" : "none",
             }}
           >
             {step === totalSteps ? "See My Results" : "Next"}
@@ -755,9 +748,9 @@ function QuestionHeader({
           fontWeight: 700,
           textTransform: "uppercase",
           letterSpacing: "0.12em",
-          color: "#00e5ff",
-          background: "rgba(0,229,255,0.08)",
-          border: "1px solid rgba(0,229,255,0.2)",
+          color: "#0ea5e9",
+          background: "rgba(14,165,233,0.08)",
+          border: "1px solid rgba(14,165,233,0.2)",
           padding: "4px 12px",
           borderRadius: 100,
           marginBottom: 16,
@@ -769,7 +762,7 @@ function QuestionHeader({
         style={{
           fontSize: "clamp(22px, 4vw, 32px)",
           fontWeight: 800,
-          color: "#fff",
+          color: "#111720",
           lineHeight: 1.2,
           marginBottom: 10,
           letterSpacing: "-0.01em",
@@ -777,7 +770,7 @@ function QuestionHeader({
       >
         {title}
       </h1>
-      <p style={{ fontSize: 15, color: "#6b8097", lineHeight: 1.6 }}>
+      <p style={{ fontSize: 15, color: "#6b7280", lineHeight: 1.6 }}>
         {subtitle}
       </p>
     </div>
@@ -806,8 +799,8 @@ function OptionCard({
         gap: 16,
         padding: "16px 20px",
         borderRadius: 12,
-        border: selected ? "1px solid #00e5ff" : "1px solid #1e2d3f",
-        background: selected ? "rgba(0,229,255,0.07)" : "#111720",
+        border: selected ? "1px solid #0ea5e9" : "1px solid #e5e7eb",
+        background: selected ? "rgba(14,165,233,0.06)" : "#f9fafb",
         cursor: "pointer",
         textAlign: "left",
         width: "100%",
@@ -820,13 +813,13 @@ function OptionCard({
           style={{
             fontWeight: 700,
             fontSize: 15,
-            color: selected ? "#00e5ff" : "#fff",
+            color: selected ? "#0ea5e9" : "#111720",
             marginBottom: 2,
           }}
         >
           {label}
         </div>
-        <div style={{ fontSize: 13, color: "#6b8097" }}>{detail}</div>
+        <div style={{ fontSize: 13, color: "#6b7280" }}>{detail}</div>
       </div>
       {selected && (
         <div
@@ -834,14 +827,14 @@ function OptionCard({
             width: 24,
             height: 24,
             borderRadius: "50%",
-            background: "#00e5ff",
+            background: "#0ea5e9",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexShrink: 0,
           }}
         >
-          <Check size={13} color="#0a0e14" />
+          <Check size={13} color="#ffffff" />
         </div>
       )}
     </button>

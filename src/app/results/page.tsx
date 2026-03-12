@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  Activity,
   ArrowRight,
   Stethoscope,
   Database,
@@ -12,6 +11,7 @@ import {
   ChevronDown,
   ChevronUp,
   RotateCcw,
+  Activity,
 } from "lucide-react";
 import rolesData from "../lib/roles.json";
 
@@ -168,8 +168,7 @@ function runMatchingEngine(answers: UserAnswers): MatchedRole[] {
   return results.sort((a, b) => b.totalScore - a.totalScore).slice(0, 5);
 }
 
-// ── READ SESSION STORAGE ONCE AT MODULE LEVEL ─────────────────
-// This runs once when the page first loads — no useEffect needed.
+// ── READ SESSION STORAGE ───────────────────────────────────────
 
 function getInitialData(): { answers: UserAnswers | null; matches: MatchedRole[] } {
   if (typeof window === "undefined") {
@@ -205,7 +204,7 @@ function GridBg() {
         pointerEvents: "none",
         zIndex: 0,
         backgroundImage:
-          "linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px)",
+          "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
         backgroundSize: "40px 40px",
       }}
     />
@@ -219,8 +218,8 @@ function Navbar({ showRetake }: { showRetake: boolean }) {
         position: "sticky",
         top: 0,
         zIndex: 50,
-        borderBottom: "1px solid #1e2d3f",
-        background: "rgba(10,14,20,0.9)",
+        borderBottom: "1px solid #e5e7eb",
+        background: "rgba(255,255,255,0.95)",
         backdropFilter: "blur(12px)",
         padding: "0 24px",
         display: "flex",
@@ -238,20 +237,12 @@ function Navbar({ showRetake }: { showRetake: boolean }) {
           textDecoration: "none",
         }}
       >
-        <div
-          style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: "linear-gradient(135deg, #00e5ff, #7c3aed)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Activity size={16} color="#0a0e14" />
-        </div>
-        <span style={{ fontWeight: 700, fontSize: 15, color: "#fff" }}>
+        <img
+          src="/logo.png"
+          alt="Logo"
+          style={{ height: 32, width: "auto" }}
+        />
+        <span style={{ fontWeight: 700, fontSize: 15, color: "#111720" }}>
           Digital Health Careers Matcher
         </span>
       </Link>
@@ -263,12 +254,12 @@ function Navbar({ showRetake }: { showRetake: boolean }) {
             alignItems: "center",
             gap: 6,
             background: "transparent",
-            color: "#6b8097",
+            color: "#6b7280",
             fontSize: 13,
             fontWeight: 600,
             padding: "8px 16px",
             borderRadius: 8,
-            border: "1px solid #1e2d3f",
+            border: "1px solid #e5e7eb",
             textDecoration: "none",
           }}
         >
@@ -290,9 +281,9 @@ export default function ResultsPage() {
     return (
       <div
         style={{
-          background: "#0a0e14",
+          background: "#ffffff",
           minHeight: "100vh",
-          color: "#e2eaf4",
+          color: "#111720",
           fontFamily: "system-ui, sans-serif",
         }}
       >
@@ -313,7 +304,7 @@ export default function ResultsPage() {
             <div style={{ fontSize: 48, marginBottom: 16 }}>🤔</div>
             <h2
               style={{
-                color: "#fff",
+                color: "#111720",
                 fontSize: 24,
                 fontWeight: 800,
                 marginBottom: 12,
@@ -321,7 +312,7 @@ export default function ResultsPage() {
             >
               No quiz answers found
             </h2>
-            <p style={{ color: "#6b8097", marginBottom: 24 }}>
+            <p style={{ color: "#6b7280", marginBottom: 24 }}>
               It looks like you came here directly. Please take the quiz first
               so we can match you to the right roles.
             </p>
@@ -331,8 +322,8 @@ export default function ResultsPage() {
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 8,
-                background: "#00e5ff",
-                color: "#0a0e14",
+                background: "#0ea5e9",
+                color: "#ffffff",
                 fontWeight: 800,
                 fontSize: 15,
                 padding: "12px 24px",
@@ -354,9 +345,9 @@ export default function ResultsPage() {
   return (
     <div
       style={{
-        background: "#0a0e14",
+        background: "#ffffff",
         minHeight: "100vh",
-        color: "#e2eaf4",
+        color: "#111720",
         fontFamily: "system-ui, sans-serif",
       }}
     >
@@ -375,9 +366,8 @@ export default function ResultsPage() {
         {/* Hero */}
         <div
           style={{
-            background:
-              "linear-gradient(135deg, rgba(0,229,255,0.06), rgba(124,58,237,0.06))",
-            border: "1px solid rgba(0,229,255,0.15)",
+            background: "linear-gradient(135deg, rgba(14,165,233,0.06), rgba(124,58,237,0.06))",
+            border: "1px solid rgba(14,165,233,0.2)",
             borderRadius: 16,
             padding: "36px 32px",
             marginBottom: 32,
@@ -393,8 +383,7 @@ export default function ResultsPage() {
               right: -40,
               width: 200,
               height: 200,
-              background:
-                "radial-gradient(circle, rgba(0,229,255,0.07), transparent 70%)",
+              background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)",
               pointerEvents: "none",
             }}
           />
@@ -404,7 +393,7 @@ export default function ResultsPage() {
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: "0.15em",
-              color: "#00e5ff",
+              color: "#0ea5e9",
               marginBottom: 12,
             }}
           >
@@ -414,7 +403,7 @@ export default function ResultsPage() {
             style={{
               fontSize: "clamp(22px, 4vw, 34px)",
               fontWeight: 800,
-              color: "#fff",
+              color: "#111720",
               lineHeight: 1.2,
               marginBottom: 10,
               letterSpacing: "-0.02em",
@@ -425,18 +414,11 @@ export default function ResultsPage() {
               : "No strong matches found"}
           </h1>
           {topMatch && (
-            <p
-              style={{
-                fontSize: 15,
-                color: "#6b8097",
-                maxWidth: 480,
-                margin: "0 auto",
-              }}
-            >
+            <p style={{ fontSize: 15, color: "#6b7280", maxWidth: 480, margin: "0 auto" }}>
               Your top match is{" "}
-              <strong style={{ color: "#fff" }}>{topMatch.role.title}</strong>{" "}
+              <strong style={{ color: "#111720" }}>{topMatch.role.title}</strong>{" "}
               with a{" "}
-              <strong style={{ color: "#00e5ff" }}>
+              <strong style={{ color: "#0ea5e9" }}>
                 {topMatch.matchPercent}% match
               </strong>
               . Scroll down to see all your results.
@@ -444,9 +426,8 @@ export default function ResultsPage() {
           )}
           {matches.length === 0 && (
             <div style={{ marginTop: 20 }}>
-              <p style={{ color: "#6b8097", marginBottom: 16 }}>
-                Try selecting more skills or a different background to broaden
-                your results.
+              <p style={{ color: "#6b7280", marginBottom: 16 }}>
+                Try selecting more skills or a different background to broaden your results.
               </p>
               <Link
                 href="/quiz"
@@ -454,8 +435,8 @@ export default function ResultsPage() {
                   display: "inline-flex",
                   alignItems: "center",
                   gap: 8,
-                  background: "#00e5ff",
-                  color: "#0a0e14",
+                  background: "#0ea5e9",
+                  color: "#ffffff",
                   fontWeight: 800,
                   fontSize: 14,
                   padding: "10px 20px",
@@ -473,8 +454,7 @@ export default function ResultsPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {matches.map((match, index) => {
             const { role, matchPercent, gapSkills, nearSkills } = match;
-            const pillar =
-              pillarConfig[role.pillar] || pillarConfig.infrastructure;
+            const pillar = pillarConfig[role.pillar] || pillarConfig.infrastructure;
             const PillarIcon = pillar.icon;
             const isExpanded = expandedId === role.id;
             const scoreColor = getScoreColor(matchPercent);
@@ -483,11 +463,10 @@ export default function ResultsPage() {
               <div
                 key={role.id}
                 style={{
-                  background: "#111720",
-                  border:
-                    index === 0
-                      ? "1px solid rgba(0,229,255,0.25)"
-                      : "1px solid #1e2d3f",
+                  background: "#f9fafb",
+                  border: index === 0
+                    ? `1px solid rgba(${pillarConfig[role.pillar]?.rgb || "14,165,233"},0.4)`
+                    : "1px solid #e5e7eb",
                   borderRadius: 14,
                   overflow: "hidden",
                 }}
@@ -495,15 +474,14 @@ export default function ResultsPage() {
                 {index === 0 && (
                   <div
                     style={{
-                      background:
-                        "linear-gradient(to right, rgba(0,229,255,0.15), rgba(124,58,237,0.1))",
+                      background: "linear-gradient(to right, rgba(14,165,233,0.1), rgba(124,58,237,0.06))",
                       padding: "6px 20px",
                       fontSize: 11,
                       fontWeight: 700,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
-                      color: "#00e5ff",
-                      borderBottom: "1px solid rgba(0,229,255,0.15)",
+                      color: "#0ea5e9",
+                      borderBottom: "1px solid rgba(14,165,233,0.15)",
                     }}
                   >
                     ⭐ Top Match
@@ -511,30 +489,15 @@ export default function ResultsPage() {
                 )}
 
                 <div style={{ padding: "20px 24px" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      gap: 16,
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 12,
-                        flex: 1,
-                        minWidth: 200,
-                      }}
-                    >
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 16, flexWrap: "wrap" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, minWidth: 200 }}>
                       <div
                         style={{
                           width: 44,
                           height: 44,
                           borderRadius: 10,
                           flexShrink: 0,
-                          background: `rgba(${pillar.rgb},0.12)`,
+                          background: `rgba(${pillar.rgb},0.1)`,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
@@ -548,21 +511,14 @@ export default function ResultsPage() {
                           style={{
                             fontWeight: 800,
                             fontSize: 16,
-                            color: "#fff",
+                            color: "#111720",
                             marginBottom: 4,
                             lineHeight: 1.2,
                           }}
                         >
                           {role.title}
                         </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 8,
-                            flexWrap: "wrap",
-                          }}
-                        >
+                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                           <span
                             style={{
                               fontSize: 11,
@@ -576,40 +532,29 @@ export default function ResultsPage() {
                           >
                             {pillar.label}
                           </span>
-                          <span style={{ fontSize: 12, color: "#6b8097" }}>
+                          <span style={{ fontSize: 12, color: "#6b7280" }}>
                             NHS Band {role.nhsBand}
                           </span>
-                          <span style={{ fontSize: 12, color: "#6b8097" }}>
-                            {formatSalary(role.salaryBand.low)} –{" "}
-                            {formatSalary(role.salaryBand.high)}
+                          <span style={{ fontSize: 12, color: "#6b7280" }}>
+                            {formatSalary(role.salaryBand.low)} – {formatSalary(role.salaryBand.high)}
                           </span>
                         </div>
                       </div>
                     </div>
 
                     <div style={{ textAlign: "center", flexShrink: 0 }}>
-                      <div
-                        style={{
-                          fontSize: 32,
-                          fontWeight: 800,
-                          color: scoreColor,
-                          lineHeight: 1,
-                        }}
-                      >
+                      <div style={{ fontSize: 32, fontWeight: 800, color: scoreColor, lineHeight: 1 }}>
                         {matchPercent}%
                       </div>
-                      <div
-                        style={{ fontSize: 11, color: "#6b8097", marginTop: 2 }}
-                      >
-                        match
-                      </div>
+                      <div style={{ fontSize: 11, color: "#6b7280", marginTop: 2 }}>match</div>
                     </div>
                   </div>
 
+                  {/* Score bar */}
                   <div
                     style={{
                       height: 4,
-                      background: "#1e2d3f",
+                      background: "#e5e7eb",
                       borderRadius: 100,
                       marginTop: 16,
                       overflow: "hidden",
@@ -625,10 +570,9 @@ export default function ResultsPage() {
                     />
                   </div>
 
+                  {/* Expand toggle */}
                   <button
-                    onClick={() =>
-                      setExpandedId(isExpanded ? null : role.id)
-                    }
+                    onClick={() => setExpandedId(isExpanded ? null : role.id)}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -637,47 +581,35 @@ export default function ResultsPage() {
                       padding: "6px 0",
                       background: "transparent",
                       border: "none",
-                      color: "#6b8097",
+                      color: "#6b7280",
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: "pointer",
                     }}
                   >
                     {isExpanded ? (
-                      <>
-                        <ChevronUp size={15} /> Hide details
-                      </>
+                      <><ChevronUp size={15} /> Hide details</>
                     ) : (
-                      <>
-                        <ChevronDown size={15} /> View full details, skills gap &amp; certifications
-                      </>
+                      <><ChevronDown size={15} /> View full details, skills gap &amp; certifications</>
                     )}
                   </button>
                 </div>
 
+                {/* Expanded detail */}
                 {isExpanded && (
-                  <div
-                    style={{ borderTop: "1px solid #1e2d3f", padding: "24px" }}
-                  >
-                    <p
-                      style={{
-                        fontSize: 14,
-                        color: "#9ab0c4",
-                        lineHeight: 1.7,
-                        marginBottom: 24,
-                      }}
-                    >
+                  <div style={{ borderTop: "1px solid #e5e7eb", padding: "24px", background: "#ffffff" }}>
+                    <p style={{ fontSize: 14, color: "#6b7280", lineHeight: 1.7, marginBottom: 24 }}>
                       {role.description}
                     </p>
 
                     <div
                       style={{
                         display: "grid",
-                        gridTemplateColumns:
-                          "repeat(auto-fit, minmax(200px, 1fr))",
+                        gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
                         gap: 20,
                       }}
                     >
+                      {/* Skills you have */}
                       <div>
                         <div
                           style={{
@@ -701,7 +633,7 @@ export default function ResultsPage() {
                                   fontSize: 12,
                                   padding: "3px 10px",
                                   borderRadius: 100,
-                                  background: "rgba(16,185,129,0.1)",
+                                  background: "rgba(16,185,129,0.08)",
                                   color: "#10b981",
                                   border: "1px solid rgba(16,185,129,0.2)",
                                 }}
@@ -709,16 +641,13 @@ export default function ResultsPage() {
                                 {s}
                               </span>
                             ))}
-                          {role.skillsRequired.filter((s) =>
-                            answers.skillsInUse.includes(s)
-                          ).length === 0 && (
-                            <span style={{ fontSize: 13, color: "#3a5068" }}>
-                              None matched yet
-                            </span>
+                          {role.skillsRequired.filter((s) => answers.skillsInUse.includes(s)).length === 0 && (
+                            <span style={{ fontSize: 13, color: "#9ca3af" }}>None matched yet</span>
                           )}
                         </div>
                       </div>
 
+                      {/* Currently studying */}
                       {nearSkills.length > 0 && (
                         <div>
                           <div
@@ -741,7 +670,7 @@ export default function ResultsPage() {
                                   fontSize: 12,
                                   padding: "3px 10px",
                                   borderRadius: 100,
-                                  background: "rgba(245,158,11,0.1)",
+                                  background: "rgba(245,158,11,0.08)",
                                   color: "#f59e0b",
                                   border: "1px solid rgba(245,158,11,0.2)",
                                 }}
@@ -753,6 +682,7 @@ export default function ResultsPage() {
                         </div>
                       )}
 
+                      {/* Skills to develop */}
                       {gapSkills.length > 0 && (
                         <div>
                           <div
@@ -775,7 +705,7 @@ export default function ResultsPage() {
                                   fontSize: 12,
                                   padding: "3px 10px",
                                   borderRadius: 100,
-                                  background: "rgba(244,63,94,0.08)",
+                                  background: "rgba(244,63,94,0.06)",
                                   color: "#f43f5e",
                                   border: "1px solid rgba(244,63,94,0.2)",
                                 }}
@@ -787,6 +717,7 @@ export default function ResultsPage() {
                         </div>
                       )}
 
+                      {/* Certifications */}
                       {role.certifications.length > 0 && (
                         <div>
                           <div
@@ -801,13 +732,7 @@ export default function ResultsPage() {
                           >
                             🏆 Recommended certifications
                           </div>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              gap: 6,
-                            }}
-                          >
+                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                             {role.certifications.map((cert) => (
                               <div
                                 key={cert}
@@ -815,8 +740,8 @@ export default function ResultsPage() {
                                   fontSize: 12,
                                   padding: "6px 12px",
                                   borderRadius: 8,
-                                  background: "rgba(139,92,246,0.08)",
-                                  color: "#c4b5fd",
+                                  background: "rgba(139,92,246,0.06)",
+                                  color: "#7c3aed",
                                   border: "1px solid rgba(139,92,246,0.2)",
                                 }}
                               >
@@ -828,11 +753,12 @@ export default function ResultsPage() {
                       )}
                     </div>
 
+                    {/* Footer row */}
                     <div
                       style={{
                         marginTop: 20,
                         paddingTop: 20,
-                        borderTop: "1px solid #1e2d3f",
+                        borderTop: "1px solid #e5e7eb",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
@@ -846,17 +772,11 @@ export default function ResultsPage() {
                             fontSize: 12,
                             padding: "4px 12px",
                             borderRadius: 6,
-                            background:
-                              role.level === "entry"
-                                ? "rgba(16,185,129,0.1)"
-                                : "rgba(245,158,11,0.1)",
-                            color:
-                              role.level === "entry" ? "#10b981" : "#f59e0b",
-                            border: `1px solid ${
-                              role.level === "entry"
-                                ? "rgba(16,185,129,0.2)"
-                                : "rgba(245,158,11,0.2)"
-                            }`,
+                            background: role.level === "entry"
+                              ? "rgba(16,185,129,0.08)"
+                              : "rgba(245,158,11,0.08)",
+                            color: role.level === "entry" ? "#10b981" : "#f59e0b",
+                            border: `1px solid ${role.level === "entry" ? "rgba(16,185,129,0.2)" : "rgba(245,158,11,0.2)"}`,
                             fontWeight: 600,
                           }}
                         >
@@ -867,9 +787,9 @@ export default function ResultsPage() {
                             fontSize: 12,
                             padding: "4px 12px",
                             borderRadius: 6,
-                            background: "rgba(0,229,255,0.08)",
-                            color: "#00e5ff",
-                            border: "1px solid rgba(0,229,255,0.2)",
+                            background: "rgba(14,165,233,0.08)",
+                            color: "#0ea5e9",
+                            border: "1px solid rgba(14,165,233,0.2)",
                             fontWeight: 600,
                           }}
                         >
@@ -877,9 +797,7 @@ export default function ResultsPage() {
                         </span>
                       </div>
                       <Link
-                        href={`https://www.jobs.nhs.uk/candidate/search/results?keyword=${encodeURIComponent(
-                          role.title
-                        )}`}
+                        href={`https://www.jobs.nhs.uk/candidate/search/results?keyword=${encodeURIComponent(role.title)}`}
                         target="_blank"
                         style={{
                           display: "inline-flex",
@@ -887,8 +805,8 @@ export default function ResultsPage() {
                           gap: 6,
                           fontSize: 13,
                           fontWeight: 700,
-                          color: "#0a0e14",
-                          background: "#00e5ff",
+                          color: "#ffffff",
+                          background: "#0ea5e9",
                           padding: "8px 16px",
                           borderRadius: 8,
                           textDecoration: "none",
@@ -904,20 +822,20 @@ export default function ResultsPage() {
           })}
         </div>
 
+        {/* Retake CTA */}
         {matches.length > 0 && (
           <div
             style={{
               marginTop: 40,
               textAlign: "center",
               padding: "32px",
-              background: "rgba(17,23,32,0.6)",
-              border: "1px solid #1e2d3f",
+              background: "#f9fafb",
+              border: "1px solid #e5e7eb",
               borderRadius: 12,
             }}
           >
-            <p style={{ color: "#6b8097", fontSize: 14, marginBottom: 16 }}>
-              Not seeing what you expected? Try updating your skills or changing
-              your preferences.
+            <p style={{ color: "#6b7280", fontSize: 14, marginBottom: 16 }}>
+              Not seeing what you expected? Try updating your skills or changing your preferences.
             </p>
             <Link
               href="/quiz"
@@ -926,12 +844,12 @@ export default function ResultsPage() {
                 alignItems: "center",
                 gap: 8,
                 background: "transparent",
-                color: "#e2eaf4",
+                color: "#111720",
                 fontWeight: 700,
                 fontSize: 14,
                 padding: "10px 20px",
                 borderRadius: 8,
-                border: "1px solid #1e2d3f",
+                border: "1px solid #e5e7eb",
                 textDecoration: "none",
               }}
             >
