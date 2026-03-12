@@ -77,26 +77,22 @@ const howItWorks = [
   {
     step: "01",
     title: "Tell us about your background",
-    detail:
-      "Whether you're a clinician, an IT professional, or completely new to healthcare — we tailor the results to you.",
+    detail: "Whether you're a clinician, an IT professional, or completely new to healthcare — we tailor the results to you.",
   },
   {
     step: "02",
     title: "Select your skills",
-    detail:
-      "Pick from a structured list of 51 relevant skills. Include ones you're currently studying too.",
+    detail: "Pick from a structured list of 51 relevant skills. Include ones you're currently studying too.",
   },
   {
     step: "03",
     title: "Tell us what kind of work energises you",
-    detail:
-      "Technical problem-solving? Working with data? Leading teams? Your answer shapes which roles rise to the top.",
+    detail: "Technical problem-solving? Working with data? Leading teams? Your answer shapes which roles rise to the top.",
   },
   {
     step: "04",
     title: "Get your matched roles",
-    detail:
-      "We show your top 5 role matches with NHS band, salary range, skills gap and the certifications to get you there.",
+    detail: "We show your top 5 role matches with NHS band, salary range, skills gap and the certifications to get you there.",
   },
 ];
 
@@ -104,6 +100,7 @@ export default function LandingPage() {
   const [visible, setVisible] = useState(false);
   const [visitCount, setVisitCount] = useState<number | null>(null);
   const [matchCount, setMatchCount] = useState<number | null>(null);
+
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
@@ -179,7 +176,6 @@ export default function LandingPage() {
         transform: visible ? "translateY(0)" : "translateY(24px)",
         transition: "opacity 0.7s ease, transform 0.7s ease",
       }}>
-        {/* Glow blob */}
         <div style={{
           position: "absolute", top: 40, left: "50%",
           transform: "translateX(-50%)",
@@ -188,12 +184,11 @@ export default function LandingPage() {
           pointerEvents: "none",
         }} />
 
-        {/* Top badge row — two badges side by side */}
+        {/* BADGES ROW */}
         <div style={{
           display: "flex", alignItems: "center", justifyContent: "center",
           gap: 10, flexWrap: "wrap", marginBottom: 28,
         }}>
-          {/* Built on real job postings badge */}
           <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             background: "rgba(14,165,233,0.06)",
@@ -206,21 +201,18 @@ export default function LandingPage() {
             Built on real job postings
           </div>
 
-          {/* Live visitor counter badge */}
-          {visitCount !== null && (
-            <div style={{
+          <div style={{
             display: "inline-flex", alignItems: "center", gap: 8,
             background: "rgba(16,185,129,0.06)",
             border: "1px solid rgba(16,185,129,0.2)",
             borderRadius: 100, padding: "6px 16px",
             fontSize: 12, color: "#10b981",
-            letterSpacing: "0.05em",
           }}>
             <Eye size={12} />
-            <span>
-              <strong style={{ fontWeight: 800 }}>
-                {visitCount !== null ? visitCount.toLocaleString("en-GB") : "..."}
-              </strong>{" "}
+            <strong style={{ fontWeight: 800 }}>
+              {visitCount !== null ? visitCount.toLocaleString("en-GB") : "..."}
+            </strong>
+            <span style={{ marginLeft: 2 }}>
               {visitCount === 1 ? "person has" : "people have"} visited this tool
             </span>
             <span style={{
@@ -230,7 +222,6 @@ export default function LandingPage() {
               display: "inline-block", flexShrink: 0,
             }} />
           </div>
-          )}
         </div>
 
         <h1 style={{
