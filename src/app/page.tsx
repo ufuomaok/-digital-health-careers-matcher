@@ -12,7 +12,6 @@ import {
   GraduationCap,
   CheckCircle,
   ChevronDown,
-  Eye,
 } from "lucide-react";
 
 const pillars = [
@@ -197,27 +196,7 @@ const stats = [
             Built on real job postings
           </div>
 
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(16,185,129,0.06)",
-            border: "1px solid rgba(16,185,129,0.2)",
-            borderRadius: 100, padding: "6px 16px",
-            fontSize: 12, color: "#10b981",
-          }}>
-            <Eye size={12} />
-            <strong style={{ fontWeight: 800 }}>
-              {visitCount !== null ? visitCount.toLocaleString("en-GB") : "..."}
-            </strong>
-            <span style={{ marginLeft: 2 }}>
-              {visitCount === 1 ? "person has" : "people have"} visited this tool
-            </span>
-            <span style={{
-              width: 7, height: 7, borderRadius: "50%",
-              background: "#10b981",
-              boxShadow: "0 0 6px rgba(16,185,129,0.7)",
-              display: "inline-block", flexShrink: 0,
-            }} />
-          </div>
+        
         </div>
 
         <h1 style={{
