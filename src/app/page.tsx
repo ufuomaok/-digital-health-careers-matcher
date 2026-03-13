@@ -99,7 +99,6 @@ const howItWorks = [
 export default function LandingPage() {
   const [visible, setVisible] = useState(false);
   const [visitCount, setVisitCount] = useState<number | null>(null);
-  const [matchCount, setMatchCount] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
@@ -112,19 +111,16 @@ export default function LandingPage() {
       .then((data) => setVisitCount(data.count))
       .catch(() => setVisitCount(null));
 
-    fetch("/api/get-counter")
-      .then((res) => res.json())
-      .then((data) => setMatchCount(data.count))
-      .catch(() => setMatchCount(null));
+   
   }, []);
 
-  const stats = [
+const stats = [
     { value: "98", label: "Digital roles mapped" },
     { value: "5", label: "Career pillars" },
     { value: "51", label: "Skills assessed" },
     {
-      value: matchCount !== null ? matchCount.toLocaleString("en-GB") : "...",
-      label: "Professionals matched",
+      value: visitCount !== null ? visitCount.toLocaleString("en-GB") : "...",
+      label: "People visited",
       live: true,
     },
   ];
@@ -415,9 +411,9 @@ export default function LandingPage() {
             Ready to find your role?
           </h2>
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 420, margin: "0 auto 32px" }}>
-            {matchCount !== null && matchCount > 0
-              ? `Join ${matchCount.toLocaleString("en-GB")} NHS professionals who have used this tool to find their next step in digital health.`
-              : "Join NHS professionals who have used this tool to find their next step in digital health."}
+            {visitCount !== null && visitCount > 0
+              ? `Join ${visitCount.toLocaleString("en-GB")} professionals who have used this tool to find their next step in digital health.`
+              : "Join  professionals who have used this tool to find their next step in digital health."}
           </p>
           <Link href="/quiz" style={{
             display: "inline-flex", alignItems: "center", gap: 10,
