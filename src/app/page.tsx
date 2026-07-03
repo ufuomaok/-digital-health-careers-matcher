@@ -119,7 +119,7 @@ const stats = [
     { value: "51", label: "Skills assessed" },
     {
       value: visitCount !== null ? visitCount.toLocaleString("en-GB") : "...",
-      label: "People visited this tool",
+      label: "People used this tool",
       live: true,
     },
   ];
