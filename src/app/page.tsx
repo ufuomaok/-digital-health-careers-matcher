@@ -298,6 +298,15 @@ const stats = [
           <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em", marginBottom: 12 }}>
             5 Pillars of Digital Health
           </h2>
+            <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
+              <a
+                href="https://www.ufuomao.com/five-pillars-in-digital-health"
+                target="_blank" rel="noopener noreferrer"
+                style={{ color: "#0ea5e9", textDecoration: "underline" }}
+              >
+                What are the 5 pillars of digital health?
+              </a>
+            </p>
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
             Every digital health role sits within one of these five domains.{" "}
             <a
