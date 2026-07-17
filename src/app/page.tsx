@@ -10,7 +10,6 @@ import {
   Users,
   Activity,
   GraduationCap,
-  CheckCircle,
   ChevronDown,
 } from "lucide-react";
 
@@ -95,9 +94,275 @@ const howItWorks = [
   },
 ];
 
+function DoodleBackground() {
+  return (
+    <div style={{ position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0, overflow: "hidden" }}>
+      <svg
+        width="100%" height="100%"
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ opacity: 0.08 }}
+        stroke="#374151"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      >
+        {/* ROW 1 */}
+
+        {/* Laptop */}
+        <g transform="translate(100,80) rotate(-8)">
+          <rect x="-18" y="-14" width="36" height="22" rx="2"/>
+          <path d="M-22,8 L22,8 L18,14 L-18,14 Z"/>
+          <line x1="-8" y1="11" x2="-4" y2="11"/>
+          <line x1="-1" y1="11" x2="3" y2="11"/>
+          <line x1="6" y1="11" x2="10" y2="11"/>
+        </g>
+
+        {/* Code brackets */}
+        <g transform="translate(340,65) rotate(5) scale(1.2)">
+          <polyline points="8,-10 -5,0 8,10"/>
+          <line x1="-3" y1="12" x2="3" y2="-12"/>
+          <polyline points="-8,-10 5,0 -8,10"/>
+        </g>
+
+        {/* Database */}
+        <g transform="translate(590,90) rotate(-3)">
+          <ellipse cx="0" cy="-10" rx="14" ry="5"/>
+          <line x1="-14" y1="-10" x2="-14" y2="8"/>
+          <line x1="14" y1="-10" x2="14" y2="8"/>
+          <path d="M-14,8 A14,5 0 0 0 14,8"/>
+          <path d="M-14,-2 A14,5 0 0 0 14,-2"/>
+        </g>
+
+        {/* Stethoscope */}
+        <g transform="translate(830,70) rotate(10)">
+          <circle cx="0" cy="14" r="5"/>
+          <path d="M-1,9 C-1,0 -15,0 -15,-10"/>
+          <path d="M1,9 C1,0 15,0 15,-10"/>
+          <line x1="-15" y1="-10" x2="-17" y2="-15"/>
+          <line x1="15" y1="-10" x2="17" y2="-15"/>
+        </g>
+
+        {/* Graduation cap */}
+        <g transform="translate(1065,85) rotate(-6)">
+          <polygon points="0,-14 20,0 0,5 -20,0"/>
+          <ellipse cx="0" cy="7" rx="11" ry="4"/>
+          <line x1="18" y1="-2" x2="18" y2="8"/>
+          <path d="M15,8 L18,12 L21,8"/>
+        </g>
+
+        {/* Bar chart */}
+        <g transform="translate(1310,75) rotate(4)">
+          <rect x="-16" y="-3" width="7" height="15" rx="1"/>
+          <rect x="-6" y="-13" width="7" height="25" rx="1"/>
+          <rect x="4" y="-7" width="7" height="19" rx="1"/>
+          <line x1="-18" y1="12" x2="14" y2="12"/>
+        </g>
+
+        {/* ROW 2 */}
+
+        {/* WiFi */}
+        <g transform="translate(55,260) rotate(6)">
+          <path d="M-18,3 A20,20 0 0 1 18,3"/>
+          <path d="M-12,3 A13,13 0 0 1 12,3"/>
+          <path d="M-6,3 A7,7 0 0 1 6,3"/>
+          <circle cx="0" cy="3" r="2" fill="#374151"/>
+        </g>
+
+        {/* Briefcase */}
+        <g transform="translate(295,245) rotate(-12)">
+          <rect x="-15" y="-4" width="30" height="18" rx="2"/>
+          <path d="M-7,-4 L-7,-9 L7,-9 L7,-4"/>
+          <line x1="-15" y1="3" x2="15" y2="3"/>
+        </g>
+
+        {/* Cloud */}
+        <g transform="translate(535,270) rotate(8)">
+          <path d="M-18,6 C-18,-2 -11,-8 -3,-6 C-1,-13 9,-13 12,-7 C17,-9 21,-3 19,6 Z"/>
+        </g>
+
+        {/* Trending up */}
+        <g transform="translate(775,250) rotate(-5)">
+          <polyline points="-16,12 -6,-1 4,5 14,-11"/>
+          <polyline points="10,-14 16,-10 14,-4"/>
+          <line x1="-18" y1="14" x2="-18" y2="-14"/>
+          <line x1="-18" y1="14" x2="16" y2="14"/>
+        </g>
+
+        {/* Magnifying glass */}
+        <g transform="translate(1015,265) rotate(7)">
+          <circle cx="-3" cy="-5" r="9"/>
+          <line x1="4" y1="2" x2="12" y2="10"/>
+        </g>
+
+        {/* Lightbulb */}
+        <g transform="translate(1255,255) rotate(-3)">
+          <path d="M-8,-5 A9,9 0 0 1 8,-5 C9,3 5,8 5,12 L-5,12 C-5,8 -9,3 -8,-5"/>
+          <line x1="-3" y1="12" x2="-3" y2="15"/>
+          <line x1="0" y1="13" x2="0" y2="16"/>
+          <line x1="3" y1="12" x2="3" y2="15"/>
+          <line x1="-2" y1="15" x2="2" y2="15"/>
+        </g>
+
+        {/* ROW 3 */}
+
+        {/* Code brackets */}
+        <g transform="translate(175,440) rotate(-7) scale(1.1)">
+          <polyline points="8,-10 -5,0 8,10"/>
+          <line x1="-3" y1="12" x2="3" y2="-12"/>
+          <polyline points="-8,-10 5,0 -8,10"/>
+        </g>
+
+        {/* Gear */}
+        <g transform="translate(420,425) rotate(11)">
+          <circle cx="0" cy="0" r="7"/>
+          <circle cx="0" cy="0" r="3"/>
+          <rect x="-3" y="-12" width="6" height="5" rx="1"/>
+          <rect x="-3" y="7" width="6" height="5" rx="1"/>
+          <rect x="-12" y="-3" width="5" height="6" rx="1"/>
+          <rect x="7" y="-3" width="5" height="6" rx="1"/>
+        </g>
+
+        {/* Laptop small */}
+        <g transform="translate(665,450) rotate(-4) scale(0.85)">
+          <rect x="-18" y="-14" width="36" height="22" rx="2"/>
+          <path d="M-22,8 L22,8 L18,14 L-18,14 Z"/>
+          <line x1="-8" y1="11" x2="-4" y2="11"/>
+          <line x1="-1" y1="11" x2="3" y2="11"/>
+        </g>
+
+        {/* Certificate */}
+        <g transform="translate(910,435) rotate(8) scale(0.9)">
+          <rect x="-13" y="-15" width="26" height="28" rx="2"/>
+          <line x1="-7" y1="-7" x2="7" y2="-7"/>
+          <line x1="-7" y1="-1" x2="7" y2="-1"/>
+          <line x1="-7" y1="5" x2="3" y2="5"/>
+          <path d="M-4,10 L0,7 L4,10 L4,14 L-4,14 Z" transform="scale(0.65)"/>
+        </g>
+
+        {/* Stethoscope small */}
+        <g transform="translate(1160,445) rotate(-9) scale(0.9)">
+          <circle cx="0" cy="14" r="5"/>
+          <path d="M-1,9 C-1,0 -15,0 -15,-10"/>
+          <path d="M1,9 C1,0 15,0 15,-10"/>
+          <line x1="-15" y1="-10" x2="-17" y2="-15"/>
+          <line x1="15" y1="-10" x2="17" y2="-15"/>
+        </g>
+
+        {/* Bar chart small */}
+        <g transform="translate(1390,430) rotate(5) scale(0.8)">
+          <rect x="-16" y="-3" width="7" height="15" rx="1"/>
+          <rect x="-6" y="-13" width="7" height="25" rx="1"/>
+          <rect x="4" y="-7" width="7" height="19" rx="1"/>
+          <line x1="-18" y1="12" x2="14" y2="12"/>
+        </g>
+
+        {/* ROW 4 */}
+
+        {/* Trending up */}
+        <g transform="translate(90,610) rotate(4) scale(0.9)">
+          <polyline points="-16,12 -6,-1 4,5 14,-11"/>
+          <polyline points="10,-14 16,-10 14,-4"/>
+          <line x1="-18" y1="14" x2="-18" y2="-14"/>
+          <line x1="-18" y1="14" x2="16" y2="14"/>
+        </g>
+
+        {/* Graduation cap */}
+        <g transform="translate(335,595) rotate(-6) scale(0.9)">
+          <polygon points="0,-14 20,0 0,5 -20,0"/>
+          <ellipse cx="0" cy="7" rx="11" ry="4"/>
+          <line x1="18" y1="-2" x2="18" y2="8"/>
+          <path d="M15,8 L18,12 L21,8"/>
+        </g>
+
+        {/* Briefcase */}
+        <g transform="translate(580,620) rotate(10) scale(0.85)">
+          <rect x="-15" y="-4" width="30" height="18" rx="2"/>
+          <path d="M-7,-4 L-7,-9 L7,-9 L7,-4"/>
+          <line x1="-15" y1="3" x2="15" y2="3"/>
+        </g>
+
+        {/* WiFi */}
+        <g transform="translate(825,600) rotate(-8)">
+          <path d="M-18,3 A20,20 0 0 1 18,3"/>
+          <path d="M-12,3 A13,13 0 0 1 12,3"/>
+          <path d="M-6,3 A7,7 0 0 1 6,3"/>
+          <circle cx="0" cy="3" r="2" fill="#374151"/>
+        </g>
+
+        {/* Cloud */}
+        <g transform="translate(1070,615) rotate(3) scale(0.9)">
+          <path d="M-18,6 C-18,-2 -11,-8 -3,-6 C-1,-13 9,-13 12,-7 C17,-9 21,-3 19,6 Z"/>
+        </g>
+
+        {/* Database */}
+        <g transform="translate(1320,595) rotate(-5) scale(0.9)">
+          <ellipse cx="0" cy="-10" rx="14" ry="5"/>
+          <line x1="-14" y1="-10" x2="-14" y2="8"/>
+          <line x1="14" y1="-10" x2="14" y2="8"/>
+          <path d="M-14,8 A14,5 0 0 0 14,8"/>
+          <path d="M-14,-2 A14,5 0 0 0 14,-2"/>
+        </g>
+
+        {/* ROW 5 */}
+
+        {/* Medical cross */}
+        <g transform="translate(160,790) rotate(-4) scale(0.7)">
+          <rect x="-5" y="-16" width="10" height="32" rx="2"/>
+          <rect x="-16" y="-5" width="32" height="10" rx="2"/>
+        </g>
+
+        {/* Magnifying glass */}
+        <g transform="translate(400,775) rotate(7) scale(1.1)">
+          <circle cx="-3" cy="-5" r="9"/>
+          <line x1="4" y1="2" x2="12" y2="10"/>
+        </g>
+
+        {/* Code brackets */}
+        <g transform="translate(660,800) rotate(-11)">
+          <polyline points="8,-10 -5,0 8,10"/>
+          <line x1="-3" y1="12" x2="3" y2="-12"/>
+          <polyline points="-8,-10 5,0 -8,10"/>
+        </g>
+
+        {/* Laptop */}
+        <g transform="translate(920,785) rotate(5) scale(0.9)">
+          <rect x="-18" y="-14" width="36" height="22" rx="2"/>
+          <path d="M-22,8 L22,8 L18,14 L-18,14 Z"/>
+          <line x1="-8" y1="11" x2="-4" y2="11"/>
+          <line x1="-1" y1="11" x2="3" y2="11"/>
+        </g>
+
+        {/* Gear */}
+        <g transform="translate(1175,795) rotate(-4) scale(0.9)">
+          <circle cx="0" cy="0" r="7"/>
+          <circle cx="0" cy="0" r="3"/>
+          <rect x="-3" y="-12" width="6" height="5" rx="1"/>
+          <rect x="-3" y="7" width="6" height="5" rx="1"/>
+          <rect x="-12" y="-3" width="5" height="6" rx="1"/>
+          <rect x="7" y="-3" width="5" height="6" rx="1"/>
+        </g>
+
+        {/* Lightbulb */}
+        <g transform="translate(1390,775) rotate(8)">
+          <path d="M-8,-5 A9,9 0 0 1 8,-5 C9,3 5,8 5,12 L-5,12 C-5,8 -9,3 -8,-5"/>
+          <line x1="-3" y1="12" x2="-3" y2="15"/>
+          <line x1="0" y1="13" x2="0" y2="16"/>
+          <line x1="3" y1="12" x2="3" y2="15"/>
+          <line x1="-2" y1="15" x2="2" y2="15"/>
+        </g>
+
+      </svg>
+    </div>
+  );
+}
+
 export default function LandingPage() {
   const [visible, setVisible] = useState(false);
   const [visitCount, setVisitCount] = useState<number | null>(null);
+  const [matchCount, setMatchCount] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
@@ -110,35 +375,33 @@ export default function LandingPage() {
       .then((data) => setVisitCount(data.count))
       .catch(() => setVisitCount(null));
 
-   
+    fetch("/api/get-counter")
+      .then((res) => res.json())
+      .then((data) => setMatchCount(data.count))
+      .catch(() => setMatchCount(null));
   }, []);
 
-const stats = [
+  const stats = [
     { value: "98", label: "Digital roles mapped" },
     { value: "5", label: "Career pillars" },
     { value: "51", label: "Skills assessed" },
     {
       value: visitCount !== null ? visitCount.toLocaleString("en-GB") : "...",
-      label: "People have used this tool",
+      label: "People used this tool",
       live: true,
     },
   ];
 
   return (
-    <div style={{ background: "#ffffff", minHeight: "100vh", color: "#111720", fontFamily: "system-ui, sans-serif" }}>
+    <div style={{ background: "#f8f7f4", minHeight: "100vh", color: "#111720", fontFamily: "system-ui, sans-serif" }}>
 
-      {/* GRID BACKGROUND */}
-      <div style={{
-        position: "fixed", inset: 0, pointerEvents: "none", zIndex: 0,
-        backgroundImage: "linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px)",
-        backgroundSize: "40px 40px",
-      }} />
+      <DoodleBackground />
 
       {/* NAVBAR */}
       <nav style={{
         position: "sticky", top: 0, zIndex: 50,
         borderBottom: "1px solid #e5e7eb",
-        background: "rgba(255,255,255,0.95)",
+        background: "rgba(248,247,244,0.95)",
         backdropFilter: "blur(12px)",
         padding: "0 24px",
         display: "flex", alignItems: "center", justifyContent: "space-between",
@@ -171,34 +434,6 @@ const stats = [
         transform: visible ? "translateY(0)" : "translateY(24px)",
         transition: "opacity 0.7s ease, transform 0.7s ease",
       }}>
-        <div style={{
-          position: "absolute", top: 40, left: "50%",
-          transform: "translateX(-50%)",
-          width: 500, height: 300,
-          background: "radial-gradient(ellipse, rgba(14,165,233,0.06) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }} />
-
-        {/* BADGES ROW */}
-        <div style={{
-          display: "flex", alignItems: "center", justifyContent: "center",
-          gap: 10, flexWrap: "wrap", marginBottom: 28,
-        }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            background: "rgba(14,165,233,0.06)",
-            border: "1px solid rgba(14,165,233,0.2)",
-            borderRadius: 100, padding: "6px 16px",
-            fontSize: 12, color: "#0ea5e9",
-            letterSpacing: "0.1em", textTransform: "uppercase",
-          }}>
-            <CheckCircle size={12} />
-            Built on real job postings
-          </div>
-
-        
-        </div>
-
         <h1 style={{
           fontSize: "clamp(36px, 6vw, 64px)",
           fontWeight: 800, lineHeight: 1.1,
@@ -238,7 +473,7 @@ const stats = [
           </Link>
           <a href="#pillars" style={{
             display: "inline-flex", alignItems: "center", gap: 8,
-            background: "transparent", color: "#111720",
+            background: "rgba(255,255,255,0.8)", color: "#111720",
             fontWeight: 600, fontSize: 15,
             padding: "16px 24px", borderRadius: 10,
             textDecoration: "none", border: "1px solid #e5e7eb",
@@ -253,7 +488,8 @@ const stats = [
         position: "relative", zIndex: 1,
         borderTop: "1px solid #e5e7eb",
         borderBottom: "1px solid #e5e7eb",
-        background: "#f9fafb",
+        background: "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(4px)",
       }}>
         <div style={{
           maxWidth: 960, margin: "0 auto",
@@ -298,15 +534,6 @@ const stats = [
           <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em", marginBottom: 12 }}>
             5 Pillars of Digital Health
           </h2>
-            <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
-              <a
-                href="https://www.ufuomao.com/five-pillars-in-digital-health"
-                target="_blank" rel="noopener noreferrer"
-                style={{ color: "#0ea5e9", textDecoration: "underline" }}
-              >
-                What are the 5 pillars of digital health?
-              </a>
-            </p>
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
             Every digital health role sits within one of these five domains.{" "}
             <a
@@ -324,7 +551,12 @@ const stats = [
           {pillars.map((p) => {
             const Icon = p.icon;
             return (
-              <div key={p.id} style={{ background: p.bg, border: `1px solid ${p.border}`, borderRadius: 12, padding: "24px" }}>
+              <div key={p.id} style={{
+                background: "rgba(255,255,255,0.85)",
+                border: `1px solid ${p.border}`,
+                borderRadius: 12, padding: "24px",
+                backdropFilter: "blur(4px)",
+              }}>
                 <div style={{
                   width: 44, height: 44, borderRadius: 10,
                   background: `rgba(${p.iconRgb},0.1)`,
@@ -353,7 +585,9 @@ const stats = [
       <section style={{
         position: "relative", zIndex: 1,
         borderTop: "1px solid #e5e7eb",
-        background: "#f9fafb", padding: "80px 24px",
+        background: "rgba(255,255,255,0.75)",
+        backdropFilter: "blur(4px)",
+        padding: "80px 24px",
       }}>
         <div style={{ maxWidth: 960, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
@@ -385,10 +619,11 @@ const stats = [
         padding: "80px 24px", textAlign: "center",
       }}>
         <div style={{
-          background: "linear-gradient(135deg, rgba(14,165,233,0.06), rgba(124,58,237,0.06))",
+          background: "rgba(255,255,255,0.85)",
           border: "1px solid rgba(14,165,233,0.2)",
           borderRadius: 16, padding: "60px 32px",
           position: "relative", overflow: "hidden",
+          backdropFilter: "blur(4px)",
         }}>
           <div style={{ position: "absolute", top: -60, right: -60, width: 240, height: 240, background: "radial-gradient(circle, rgba(14,165,233,0.07), transparent 70%)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", bottom: -60, left: -60, width: 240, height: 240, background: "radial-gradient(circle, rgba(124,58,237,0.07), transparent 70%)", pointerEvents: "none" }} />
@@ -400,8 +635,8 @@ const stats = [
           </h2>
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 420, margin: "0 auto 32px" }}>
             {visitCount !== null && visitCount > 0
-              ? `Join ${visitCount.toLocaleString("en-GB")} professionals who have used this tool to find their next step in digital health.`
-              : "Join  professionals who have used this tool to find their next step in digital health."}
+              ? `Join ${visitCount.toLocaleString("en-GB")} people already exploring digital health careers.`
+              : "Join NHS professionals finding their next step in digital health."}
           </p>
           <Link href="/quiz" style={{
             display: "inline-flex", alignItems: "center", gap: 10,
@@ -423,7 +658,7 @@ const stats = [
         fontSize: 13, color: "#9ca3af",
         position: "relative", zIndex: 1,
       }}>
-        Digital Health Career Matcher by Ufuoma O. · Built on real job postings ·{" "}
+        Digital Health Career Matcher by Ufuoma O. · Built on real NHS job postings ·{" "}
         {new Date().getFullYear()}
       </footer>
 
