@@ -102,8 +102,8 @@ function DoodleBackground() {
         viewBox="0 0 1440 900"
         preserveAspectRatio="xMidYMid slice"
         xmlns="http://www.w3.org/2000/svg"
-        style={{ opacity: 0.08 }}
-        stroke="#374151"
+        style={{ opacity: 0.18 }}
+        stroke="#0ea5e9"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -168,7 +168,7 @@ function DoodleBackground() {
           <path d="M-18,3 A20,20 0 0 1 18,3"/>
           <path d="M-12,3 A13,13 0 0 1 12,3"/>
           <path d="M-6,3 A7,7 0 0 1 6,3"/>
-          <circle cx="0" cy="3" r="2" fill="#374151"/>
+          <circle cx="0" cy="3" r="2" fill="#0ea5e9"/>
         </g>
 
         {/* Briefcase */}
@@ -289,7 +289,7 @@ function DoodleBackground() {
           <path d="M-18,3 A20,20 0 0 1 18,3"/>
           <path d="M-12,3 A13,13 0 0 1 12,3"/>
           <path d="M-6,3 A7,7 0 0 1 6,3"/>
-          <circle cx="0" cy="3" r="2" fill="#374151"/>
+          <circle cx="0" cy="3" r="2" fill="#0ea5e9"/>
         </g>
 
         {/* Cloud */}
