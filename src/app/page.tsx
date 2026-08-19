@@ -501,15 +501,7 @@ export default function LandingPage() {
                 lineHeight: 1, marginBottom: 6,
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
               }}>
-                {s.value}
-                {"live" in s && s.live && (
-                  <span style={{
-                    width: 8, height: 8, borderRadius: "50%",
-                    background: "#10b981",
-                    display: "inline-block",
-                    boxShadow: "0 0 6px rgba(16,185,129,0.6)",
-                  }} />
-                )}
+              {s.value}
               </div>
               <div style={{ fontSize: 13, color: "#6b7280" }}>
                 {s.label}
