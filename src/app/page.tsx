@@ -385,11 +385,7 @@ export default function LandingPage() {
     { value: "98", label: "Digital roles mapped" },
     { value: "5", label: "Career pillars" },
     { value: "51", label: "Skills assessed" },
-    {
-      value: visitCount !== null ? visitCount.toLocaleString("en-GB") : "...",
-      label: "People used this tool",
-      live: true,
-    },
+    { value: "1281", label: "People used this tool", note: "as at August 2026" },
   ];
 
   return (
@@ -515,7 +511,10 @@ export default function LandingPage() {
                   }} />
                 )}
               </div>
-              <div style={{ fontSize: 13, color: "#6b7280" }}>{s.label}</div>
+              <div style={{ fontSize: 13, color: "#6b7280" }}>
+                {s.label}
+                {"note" in s && s.note && <em> {s.note}</em>}
+              </div>
             </div>
           ))}
         </div>
