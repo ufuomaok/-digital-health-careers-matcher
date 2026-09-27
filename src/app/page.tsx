@@ -329,11 +329,6 @@ export default function LandingPage() {
     { value: "98", label: "Digital roles mapped", live: false },
     { value: "5", label: "Career pillars", live: false },
     { value: "51", label: "Skills assessed", live: false },
-    {
-      value: quizCount !== null ? quizCount.toLocaleString("en-GB") : "...",
-      label: "Quizzes completed",
-      live: true,
-    },
   ];
 
   return (
