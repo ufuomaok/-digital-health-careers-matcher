@@ -1,74 +1,38 @@
-import { NextRequest, NextResponse } from "next/server";
-import { TableClient, AzureNamedKeyCredential } from "@azure/data-tables";
-
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING!;
+import { NextResponse } from "next/server";
+import { supabase } from "@/app/lib/supabase-client";
 
 function generateId(): string {
-  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-  let id = "";
-  for (let i = 0; i < 8; i++) {
-    id += chars[Math.floor(Math.random() * chars.length)];
-  }
-  return id;
+  return Math.random().toString(36).substring(2, 10);
 }
 
-export async function POST(req: NextRequest) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-
-    // Save result to Azure Table Storage
-    const resultsClient = TableClient.fromConnectionString(
-      connectionString,
-      "results"
-    );
-
-    await resultsClient.createTable();
-
+    const body = await request.json();
+    const { answers, matches } = body;
     const id = generateId();
-    await resultsClient.createEntity({
-      partitionKey: "result",
-      rowKey: id,
-      answers: JSON.stringify(body.answers),
-      matches: JSON.stringify(body.matches),
-      createdAt: new Date().toISOString(),
-    });
 
-    // Increment visit counter
-    const counterClient = TableClient.fromConnectionString(
-      connectionString,
-      "counter"
-    );
+    // Save results for shareable link
+    await supabase
+      .from("results")
+      .insert({ id, answers, matches });
 
-    await counterClient.createTable();
+    // Increment quiz completions counter
+    const { data } = await supabase
+      .from("counter")
+      .select("count")
+      .eq("id", "quiz_completions")
+      .single();
 
-    let currentCount = 0;
-    try {
-      const entity = await counterClient.getEntity("counter", "total");
-      currentCount = Number(entity.count) || 0;
-    } catch {
-      // Entity doesn't exist yet — start from 0
-    }
+    const newCount = (data?.count || 0) + 1;
 
-    try {
-      await counterClient.updateEntity(
-        {
-          partitionKey: "counter",
-          rowKey: "total",
-          count: currentCount + 1,
-        },
-        "Replace"
-      );
-    } catch {
-      await counterClient.createEntity({
-        partitionKey: "counter",
-        rowKey: "total",
-        count: 1,
-      });
-    }
+    await supabase
+      .from("counter")
+      .update({ count: newCount })
+      .eq("id", "quiz_completions");
 
     return NextResponse.json({ id });
   } catch (error) {
     console.error("Save results error:", error);
-    return NextResponse.json({ error: "Failed to save results" }, { status: 500 });
+    return NextResponse.json({ error: "Failed to save" }, { status: 500 });
   }
 }

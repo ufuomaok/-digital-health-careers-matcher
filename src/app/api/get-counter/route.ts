@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import { TableClient } from "@azure/data-tables";
-
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING!;
+import { supabase } from "@/app/lib/supabase-client";
 
 export async function GET() {
   try {
-    const client = TableClient.fromConnectionString(connectionString, "counter");
-    const entity = await client.getEntity("counter", "total");
-    return NextResponse.json({ count: Number(entity.count) || 0 });
-  } catch {
+    const { data } = await supabase
+      .from("counter")
+      .select("count")
+      .eq("id", "quiz_completions")
+      .single();
+
+    return NextResponse.json({ count: data?.count || 0 });
+  } catch (error) {
+    console.error("Get counter error:", error);
     return NextResponse.json({ count: 0 });
   }
 }

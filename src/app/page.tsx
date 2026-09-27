@@ -110,8 +110,6 @@ function DoodleBackground() {
         fill="none"
       >
         {/* ROW 1 */}
-
-        {/* Laptop */}
         <g transform="translate(100,80) rotate(-8)">
           <rect x="-18" y="-14" width="36" height="22" rx="2"/>
           <path d="M-22,8 L22,8 L18,14 L-18,14 Z"/>
@@ -119,15 +117,11 @@ function DoodleBackground() {
           <line x1="-1" y1="11" x2="3" y2="11"/>
           <line x1="6" y1="11" x2="10" y2="11"/>
         </g>
-
-        {/* Code brackets */}
         <g transform="translate(340,65) rotate(5) scale(1.2)">
           <polyline points="8,-10 -5,0 8,10"/>
           <line x1="-3" y1="12" x2="3" y2="-12"/>
           <polyline points="-8,-10 5,0 -8,10"/>
         </g>
-
-        {/* Database */}
         <g transform="translate(590,90) rotate(-3)">
           <ellipse cx="0" cy="-10" rx="14" ry="5"/>
           <line x1="-14" y1="-10" x2="-14" y2="8"/>
@@ -135,8 +129,6 @@ function DoodleBackground() {
           <path d="M-14,8 A14,5 0 0 0 14,8"/>
           <path d="M-14,-2 A14,5 0 0 0 14,-2"/>
         </g>
-
-        {/* Stethoscope */}
         <g transform="translate(830,70) rotate(10)">
           <circle cx="0" cy="14" r="5"/>
           <path d="M-1,9 C-1,0 -15,0 -15,-10"/>
@@ -144,16 +136,12 @@ function DoodleBackground() {
           <line x1="-15" y1="-10" x2="-17" y2="-15"/>
           <line x1="15" y1="-10" x2="17" y2="-15"/>
         </g>
-
-        {/* Graduation cap */}
         <g transform="translate(1065,85) rotate(-6)">
           <polygon points="0,-14 20,0 0,5 -20,0"/>
           <ellipse cx="0" cy="7" rx="11" ry="4"/>
           <line x1="18" y1="-2" x2="18" y2="8"/>
           <path d="M15,8 L18,12 L21,8"/>
         </g>
-
-        {/* Bar chart */}
         <g transform="translate(1310,75) rotate(4)">
           <rect x="-16" y="-3" width="7" height="15" rx="1"/>
           <rect x="-6" y="-13" width="7" height="25" rx="1"/>
@@ -162,42 +150,30 @@ function DoodleBackground() {
         </g>
 
         {/* ROW 2 */}
-
-        {/* WiFi */}
         <g transform="translate(55,260) rotate(6)">
           <path d="M-18,3 A20,20 0 0 1 18,3"/>
           <path d="M-12,3 A13,13 0 0 1 12,3"/>
           <path d="M-6,3 A7,7 0 0 1 6,3"/>
           <circle cx="0" cy="3" r="2" fill="#0ea5e9"/>
         </g>
-
-        {/* Briefcase */}
         <g transform="translate(295,245) rotate(-12)">
           <rect x="-15" y="-4" width="30" height="18" rx="2"/>
           <path d="M-7,-4 L-7,-9 L7,-9 L7,-4"/>
           <line x1="-15" y1="3" x2="15" y2="3"/>
         </g>
-
-        {/* Cloud */}
         <g transform="translate(535,270) rotate(8)">
           <path d="M-18,6 C-18,-2 -11,-8 -3,-6 C-1,-13 9,-13 12,-7 C17,-9 21,-3 19,6 Z"/>
         </g>
-
-        {/* Trending up */}
         <g transform="translate(775,250) rotate(-5)">
           <polyline points="-16,12 -6,-1 4,5 14,-11"/>
           <polyline points="10,-14 16,-10 14,-4"/>
           <line x1="-18" y1="14" x2="-18" y2="-14"/>
           <line x1="-18" y1="14" x2="16" y2="14"/>
         </g>
-
-        {/* Magnifying glass */}
         <g transform="translate(1015,265) rotate(7)">
           <circle cx="-3" cy="-5" r="9"/>
           <line x1="4" y1="2" x2="12" y2="10"/>
         </g>
-
-        {/* Lightbulb */}
         <g transform="translate(1255,255) rotate(-3)">
           <path d="M-8,-5 A9,9 0 0 1 8,-5 C9,3 5,8 5,12 L-5,12 C-5,8 -9,3 -8,-5"/>
           <line x1="-3" y1="12" x2="-3" y2="15"/>
@@ -207,15 +183,11 @@ function DoodleBackground() {
         </g>
 
         {/* ROW 3 */}
-
-        {/* Code brackets */}
         <g transform="translate(175,440) rotate(-7) scale(1.1)">
           <polyline points="8,-10 -5,0 8,10"/>
           <line x1="-3" y1="12" x2="3" y2="-12"/>
           <polyline points="-8,-10 5,0 -8,10"/>
         </g>
-
-        {/* Gear */}
         <g transform="translate(420,425) rotate(11)">
           <circle cx="0" cy="0" r="7"/>
           <circle cx="0" cy="0" r="3"/>
@@ -224,25 +196,18 @@ function DoodleBackground() {
           <rect x="-12" y="-3" width="5" height="6" rx="1"/>
           <rect x="7" y="-3" width="5" height="6" rx="1"/>
         </g>
-
-        {/* Laptop small */}
         <g transform="translate(665,450) rotate(-4) scale(0.85)">
           <rect x="-18" y="-14" width="36" height="22" rx="2"/>
           <path d="M-22,8 L22,8 L18,14 L-18,14 Z"/>
           <line x1="-8" y1="11" x2="-4" y2="11"/>
           <line x1="-1" y1="11" x2="3" y2="11"/>
         </g>
-
-        {/* Certificate */}
         <g transform="translate(910,435) rotate(8) scale(0.9)">
           <rect x="-13" y="-15" width="26" height="28" rx="2"/>
           <line x1="-7" y1="-7" x2="7" y2="-7"/>
           <line x1="-7" y1="-1" x2="7" y2="-1"/>
           <line x1="-7" y1="5" x2="3" y2="5"/>
-          <path d="M-4,10 L0,7 L4,10 L4,14 L-4,14 Z" transform="scale(0.65)"/>
         </g>
-
-        {/* Stethoscope small */}
         <g transform="translate(1160,445) rotate(-9) scale(0.9)">
           <circle cx="0" cy="14" r="5"/>
           <path d="M-1,9 C-1,0 -15,0 -15,-10"/>
@@ -250,8 +215,6 @@ function DoodleBackground() {
           <line x1="-15" y1="-10" x2="-17" y2="-15"/>
           <line x1="15" y1="-10" x2="17" y2="-15"/>
         </g>
-
-        {/* Bar chart small */}
         <g transform="translate(1390,430) rotate(5) scale(0.8)">
           <rect x="-16" y="-3" width="7" height="15" rx="1"/>
           <rect x="-6" y="-13" width="7" height="25" rx="1"/>
@@ -260,44 +223,32 @@ function DoodleBackground() {
         </g>
 
         {/* ROW 4 */}
-
-        {/* Trending up */}
         <g transform="translate(90,610) rotate(4) scale(0.9)">
           <polyline points="-16,12 -6,-1 4,5 14,-11"/>
           <polyline points="10,-14 16,-10 14,-4"/>
           <line x1="-18" y1="14" x2="-18" y2="-14"/>
           <line x1="-18" y1="14" x2="16" y2="14"/>
         </g>
-
-        {/* Graduation cap */}
         <g transform="translate(335,595) rotate(-6) scale(0.9)">
           <polygon points="0,-14 20,0 0,5 -20,0"/>
           <ellipse cx="0" cy="7" rx="11" ry="4"/>
           <line x1="18" y1="-2" x2="18" y2="8"/>
           <path d="M15,8 L18,12 L21,8"/>
         </g>
-
-        {/* Briefcase */}
         <g transform="translate(580,620) rotate(10) scale(0.85)">
           <rect x="-15" y="-4" width="30" height="18" rx="2"/>
           <path d="M-7,-4 L-7,-9 L7,-9 L7,-4"/>
           <line x1="-15" y1="3" x2="15" y2="3"/>
         </g>
-
-        {/* WiFi */}
         <g transform="translate(825,600) rotate(-8)">
           <path d="M-18,3 A20,20 0 0 1 18,3"/>
           <path d="M-12,3 A13,13 0 0 1 12,3"/>
           <path d="M-6,3 A7,7 0 0 1 6,3"/>
           <circle cx="0" cy="3" r="2" fill="#0ea5e9"/>
         </g>
-
-        {/* Cloud */}
         <g transform="translate(1070,615) rotate(3) scale(0.9)">
           <path d="M-18,6 C-18,-2 -11,-8 -3,-6 C-1,-13 9,-13 12,-7 C17,-9 21,-3 19,6 Z"/>
         </g>
-
-        {/* Database */}
         <g transform="translate(1320,595) rotate(-5) scale(0.9)">
           <ellipse cx="0" cy="-10" rx="14" ry="5"/>
           <line x1="-14" y1="-10" x2="-14" y2="8"/>
@@ -307,35 +258,25 @@ function DoodleBackground() {
         </g>
 
         {/* ROW 5 */}
-
-        {/* Medical cross */}
         <g transform="translate(160,790) rotate(-4) scale(0.7)">
           <rect x="-5" y="-16" width="10" height="32" rx="2"/>
           <rect x="-16" y="-5" width="32" height="10" rx="2"/>
         </g>
-
-        {/* Magnifying glass */}
         <g transform="translate(400,775) rotate(7) scale(1.1)">
           <circle cx="-3" cy="-5" r="9"/>
           <line x1="4" y1="2" x2="12" y2="10"/>
         </g>
-
-        {/* Code brackets */}
         <g transform="translate(660,800) rotate(-11)">
           <polyline points="8,-10 -5,0 8,10"/>
           <line x1="-3" y1="12" x2="3" y2="-12"/>
           <polyline points="-8,-10 5,0 -8,10"/>
         </g>
-
-        {/* Laptop */}
         <g transform="translate(920,785) rotate(5) scale(0.9)">
           <rect x="-18" y="-14" width="36" height="22" rx="2"/>
           <path d="M-22,8 L22,8 L18,14 L-18,14 Z"/>
           <line x1="-8" y1="11" x2="-4" y2="11"/>
           <line x1="-1" y1="11" x2="3" y2="11"/>
         </g>
-
-        {/* Gear */}
         <g transform="translate(1175,795) rotate(-4) scale(0.9)">
           <circle cx="0" cy="0" r="7"/>
           <circle cx="0" cy="0" r="3"/>
@@ -344,8 +285,6 @@ function DoodleBackground() {
           <rect x="-12" y="-3" width="5" height="6" rx="1"/>
           <rect x="7" y="-3" width="5" height="6" rx="1"/>
         </g>
-
-        {/* Lightbulb */}
         <g transform="translate(1390,775) rotate(8)">
           <path d="M-8,-5 A9,9 0 0 1 8,-5 C9,3 5,8 5,12 L-5,12 C-5,8 -9,3 -8,-5"/>
           <line x1="-3" y1="12" x2="-3" y2="15"/>
@@ -353,7 +292,6 @@ function DoodleBackground() {
           <line x1="3" y1="12" x2="3" y2="15"/>
           <line x1="-2" y1="15" x2="2" y2="15"/>
         </g>
-
       </svg>
     </div>
   );
@@ -361,8 +299,7 @@ function DoodleBackground() {
 
 export default function LandingPage() {
   const [visible, setVisible] = useState(false);
-  const [visitCount, setVisitCount] = useState<number | null>(null);
-  const [matchCount, setMatchCount] = useState<number | null>(null);
+  const [quizCount, setQuizCount] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
@@ -370,22 +307,29 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    fetch("/api/visit-counter")
-      .then((res) => res.json())
-      .then((data) => setVisitCount(data.count))
-      .catch(() => setVisitCount(null));
+    const fetchCount = () => {
+      fetch("/api/get-counter")
+        .then((res) => res.json())
+        .then((data) => setQuizCount(data.count))
+        .catch(() => setQuizCount(null));
+    };
 
-    fetch("/api/get-counter")
-      .then((res) => res.json())
-      .then((data) => setMatchCount(data.count))
-      .catch(() => setMatchCount(null));
+    fetchCount();
+
+    // Poll every 30 seconds so counter updates live
+    const interval = setInterval(fetchCount, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const stats = [
-    { value: "98", label: "Digital roles mapped" },
-    { value: "5", label: "Career pillars" },
-    { value: "51", label: "Skills assessed" },
-    { value: "1281", label: "People used this tool", note: "as at August 2026" },
+    { value: "98", label: "Digital roles mapped", live: false },
+    { value: "5", label: "Career pillars", live: false },
+    { value: "51", label: "Skills assessed", live: false },
+    {
+      value: quizCount !== null ? quizCount.toLocaleString("en-GB") : "...",
+      label: "Quizzes completed",
+      live: true,
+    },
   ];
 
   return (
@@ -501,12 +445,17 @@ export default function LandingPage() {
                 lineHeight: 1, marginBottom: 6,
                 display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
               }}>
-              {s.value}
+                {s.value}
+                {s.live && (
+                  <span style={{
+                    width: 8, height: 8, borderRadius: "50%",
+                    background: "#10b981",
+                    display: "inline-block",
+                    boxShadow: "0 0 6px rgba(16,185,129,0.6)",
+                  }} />
+                )}
               </div>
-              <div style={{ fontSize: 13, color: "#6b7280" }}>
-                {s.label}
-                {"note" in s && s.note && <em> {s.note}</em>}
-              </div>
+              <div style={{ fontSize: 13, color: "#6b7280" }}>{s.label}</div>
             </div>
           ))}
         </div>
@@ -625,8 +574,8 @@ export default function LandingPage() {
             Ready to find your role?
           </h2>
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 420, margin: "0 auto 32px" }}>
-            {visitCount !== null && visitCount > 0
-              ? `Join ${visitCount.toLocaleString("en-GB")} people already exploring digital health careers.`
+            {quizCount !== null && quizCount > 0
+              ? `Join ${quizCount.toLocaleString("en-GB")} people who have already found their digital health career match.`
               : "Join NHS professionals finding their next step in digital health."}
           </p>
           <Link href="/quiz" style={{
@@ -649,7 +598,7 @@ export default function LandingPage() {
         fontSize: 13, color: "#9ca3af",
         position: "relative", zIndex: 1,
       }}>
-        Digital Health Career Matcher by Ufuoma O. · Built on real NHS job postings ·{" "}
+        Digital Health Career Matcher by Ufuoma O. · No personal data collected ·{" "}
         {new Date().getFullYear()}
       </footer>
 

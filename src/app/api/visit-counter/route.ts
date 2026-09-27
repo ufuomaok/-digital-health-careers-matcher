@@ -1,33 +1,20 @@
 import { NextResponse } from "next/server";
-import { TableClient } from "@azure/data-tables";
-
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING!;
+import { supabase } from "@/app/lib/supabase-client";
 
 export async function GET() {
   try {
-    const client = TableClient.fromConnectionString(connectionString, "visitcounter");
-    await client.createTable();
+    const { data } = await supabase
+      .from("counter")
+      .select("count")
+      .eq("id", "page_visits")
+      .single();
 
-    let currentCount = 0;
-    try {
-      const entity = await client.getEntity("counter", "visits");
-      currentCount = Number(entity.count) || 0;
-    } catch {
-      // Entity doesn't exist yet
-    }
+    const newCount = (data?.count || 0) + 1;
 
-    const newCount = currentCount + 1;
-
-    try {
-      await client.updateEntity(
-        { partitionKey: "counter", rowKey: "visits", count: newCount },
-        "Replace"
-      );
-    } catch {
-      await client.createEntity(
-        { partitionKey: "counter", rowKey: "visits", count: newCount }
-      );
-    }
+    await supabase
+      .from("counter")
+      .update({ count: newCount })
+      .eq("id", "page_visits");
 
     return NextResponse.json({ count: newCount });
   } catch (error) {
