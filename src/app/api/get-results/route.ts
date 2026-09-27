@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { TableClient } from "@azure/data-tables";
-
-const connectionString = process.env.AZURE_STORAGE_CONNECTION_STRING!;
+import { getSupabase } from "@/app/lib/supabase-client";
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
@@ -12,12 +10,18 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const client = TableClient.fromConnectionString(connectionString, "results");
-    const entity = await client.getEntity("result", id);
+    const supabase = getSupabase();
+    const { data, error } = await supabase
+      .from("results")
+      .select("answers, matches")
+      .eq("id", id)
+      .single();
+
+    if (error || !data) throw error;
 
     return NextResponse.json({
-      answers: JSON.parse(entity.answers as string),
-      matches: JSON.parse(entity.matches as string),
+      answers: data.answers,
+      matches: data.matches,
     });
   } catch {
     return NextResponse.json({ error: "Results not found" }, { status: 404 });
