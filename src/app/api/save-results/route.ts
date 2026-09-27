@@ -13,23 +13,32 @@ export async function POST(request: Request) {
     const id = generateId();
 
     // Save results for shareable link
-    await supabase
+    const { error: insertError } = await supabase
       .from("results")
       .insert({ id, answers, matches });
 
+    if (insertError) throw insertError;
+
     // Increment quiz completions counter
-    const { data } = await supabase
+    const { data, error: readError } = await supabase
       .from("counter")
       .select("count")
       .eq("id", "quiz_completions")
       .single();
 
+    if (readError) console.error("Quiz counter read error:", readError);
+
     const newCount = (data?.count || 0) + 1;
 
-    await supabase
+    const { data: updated, error: updateError } = await supabase
       .from("counter")
       .update({ count: newCount })
-      .eq("id", "quiz_completions");
+      .eq("id", "quiz_completions")
+      .select();
+
+    if (updateError || !updated?.length) {
+      console.error("Quiz counter update failed:", updateError ?? "no rows updated");
+    }
 
     return NextResponse.json({ id });
   } catch (error) {
