@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/app/lib/supabase-client";
+import { getSupabase } from "@/app/lib/supabase-client";
 
 export async function GET() {
   try {
+    const supabase = getSupabase();
     const { data } = await supabase
       .from("counter")
       .select("count")

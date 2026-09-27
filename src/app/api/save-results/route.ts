@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/app/lib/supabase-client";
+import { getSupabase } from "@/app/lib/supabase-client";
 
 function generateId(): string {
   return Math.random().toString(36).substring(2, 10);
@@ -7,6 +7,7 @@ function generateId(): string {
 
 export async function POST(request: Request) {
   try {
+    const supabase = getSupabase();
     const body = await request.json();
     const { answers, matches } = body;
     const id = generateId();
