@@ -300,6 +300,7 @@ function DoodleBackground() {
 export default function LandingPage() {
   const [visible, setVisible] = useState(false);
   const [quizCount, setQuizCount] = useState<number | null>(null);
+  const [visitCount, setVisitCount] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
@@ -307,17 +308,20 @@ export default function LandingPage() {
   }, []);
 
   useEffect(() => {
-    const fetchCount = () => {
+    const fetchCounts = () => {
       fetch("/api/get-counter")
         .then((res) => res.json())
         .then((data) => setQuizCount(data.count))
         .catch(() => setQuizCount(null));
+
+      fetch("/api/visit-counter")
+        .then((res) => res.json())
+        .then((data) => setVisitCount(data.count))
+        .catch(() => setVisitCount(null));
     };
 
-    fetchCount();
-
-    // Poll every 30 seconds so counter updates live
-    const interval = setInterval(fetchCount, 30000);
+    fetchCounts();
+    const interval = setInterval(fetchCounts, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -459,6 +463,108 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+      </section>
+      
+      {/* OUR STATS */}
+      <section style={{
+        position: "relative", zIndex: 1,
+        maxWidth: 960, margin: "0 auto",
+        padding: "80px 24px",
+      }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
+            Live Data
+          </p>
+          <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em" }}>
+            Our Stats
+          </h2>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
+
+          {/* Visits Card */}
+          <div style={{
+            background: "rgba(255,255,255,0.85)",
+            border: "1px solid rgba(14,165,233,0.2)",
+            borderRadius: 16, padding: "40px 32px",
+            textAlign: "center",
+            backdropFilter: "blur(4px)",
+            position: "relative", overflow: "hidden",
+          }}>
+            <div style={{ position: "absolute", top: -40, right: -40, width: 160, height: 160, background: "radial-gradient(circle, rgba(14,165,233,0.06), transparent 70%)", pointerEvents: "none" }} />
+            <div style={{
+              fontSize: 13, fontWeight: 600,
+              color: "#0ea5e9", letterSpacing: "0.05em",
+              textTransform: "uppercase", marginBottom: 16,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            }}>
+              <span style={{
+                width: 8, height: 8, borderRadius: "50%",
+                background: "#10b981",
+                display: "inline-block",
+                boxShadow: "0 0 8px rgba(16,185,129,0.8)",
+                animation: "pulse 2s infinite",
+              }} />
+              Live · Website Visits
+            </div>
+            <div style={{
+              fontSize: "clamp(48px, 8vw, 80px)",
+              fontWeight: 800, color: "#111720",
+              lineHeight: 1, marginBottom: 12,
+            }}>
+              {visitCount !== null ? visitCount.toLocaleString("en-GB") : "..."}
+            </div>
+            <div style={{ fontSize: 15, color: "#6b7280" }}>
+              People have visited this tool
+            </div>
+          </div>
+
+          {/* Quiz Completions Card */}
+          <div style={{
+            background: "rgba(255,255,255,0.85)",
+            border: "1px solid rgba(139,92,246,0.2)",
+            borderRadius: 16, padding: "40px 32px",
+            textAlign: "center",
+            backdropFilter: "blur(4px)",
+            position: "relative", overflow: "hidden",
+          }}>
+            <div style={{ position: "absolute", top: -40, right: -40, width: 160, height: 160, background: "radial-gradient(circle, rgba(139,92,246,0.06), transparent 70%)", pointerEvents: "none" }} />
+            <div style={{
+              fontSize: 13, fontWeight: 600,
+              color: "#8b5cf6", letterSpacing: "0.05em",
+              textTransform: "uppercase", marginBottom: 16,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+            }}>
+              <span style={{
+                width: 8, height: 8, borderRadius: "50%",
+                background: "#10b981",
+                display: "inline-block",
+                boxShadow: "0 0 8px rgba(16,185,129,0.8)",
+                animation: "pulse 2s infinite",
+              }} />
+              Live · Quizzes Completed
+            </div>
+            <div style={{
+              fontSize: "clamp(48px, 8vw, 80px)",
+              fontWeight: 800, color: "#111720",
+              lineHeight: 1, marginBottom: 12,
+            }}>
+              {quizCount !== null ? quizCount.toLocaleString("en-GB") : "..."}
+            </div>
+            <div style={{ fontSize: 15, color: "#6b7280" }}>
+              NHS professionals matched to a role
+            </div>
+          </div>
+
+        </div>
+
+        {/* Pulse animation */}
+        <style>{`
+          @keyframes pulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(16,185,129,0.8); }
+            50% { opacity: 0.5; box-shadow: 0 0 4px rgba(16,185,129,0.4); }
+          }
+        `}</style>
       </section>
 
       {/* 5 PILLARS */}
