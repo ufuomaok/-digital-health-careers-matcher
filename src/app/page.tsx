@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -301,10 +301,21 @@ export default function LandingPage() {
   const [visible, setVisible] = useState(false);
   const [quizCount, setQuizCount] = useState<number | null>(null);
   const [visitCount, setVisitCount] = useState<number | null>(null);
+  const visitCountedRef = useRef(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setVisible(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (visitCountedRef.current) return;
+    visitCountedRef.current = true;
+
+    fetch("/api/visit-counter")
+      .then((res) => res.json())
+      .then((data) => setVisitCount(data.count))
+      .catch(() => setVisitCount(null));
   }, []);
 
   useEffect(() => {
@@ -314,7 +325,7 @@ export default function LandingPage() {
         .then((data) => setQuizCount(data.count))
         .catch(() => setQuizCount(null));
 
-      fetch("/api/visit-counter")
+      fetch("/api/get-visits")
         .then((res) => res.json())
         .then((data) => setVisitCount(data.count))
         .catch(() => setVisitCount(null));
