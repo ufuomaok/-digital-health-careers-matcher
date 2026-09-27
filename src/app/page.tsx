@@ -464,8 +464,68 @@ export default function LandingPage() {
           ))}
         </div>
       </section>
-      
-      {/* OUR STATS */}
+
+      {/* 5 PILLARS */}
+      <section id="pillars" style={{
+        position: "relative", zIndex: 1,
+        maxWidth: 960, margin: "0 auto",
+        padding: "80px 24px",
+      }}>
+        <div style={{ textAlign: "center", marginBottom: 48 }}>
+          <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
+            The Framework
+          </p>
+          <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em", marginBottom: 12 }}>
+            5 Pillars of Digital Health
+          </h2>
+          <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
+            Every digital health role sits within one of these five domains.{" "}
+            <a
+              href="https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6"
+              target="_blank" rel="noopener noreferrer"
+              style={{ color: "#0ea5e9", textDecoration: "underline" }}
+            >
+              Watch a free course explaining the 5 pillars of digital health
+            </a>{" "}
+            — your quiz results map you to the pillar and the specific roles that suit you best.
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
+          {pillars.map((p) => {
+            const Icon = p.icon;
+            return (
+              <div key={p.id} style={{
+                background: "rgba(255,255,255,0.85)",
+                border: `1px solid ${p.border}`,
+                borderRadius: 12, padding: "24px",
+                backdropFilter: "blur(4px)",
+              }}>
+                <div style={{
+                  width: 44, height: 44, borderRadius: 10,
+                  background: `rgba(${p.iconRgb},0.1)`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  marginBottom: 16,
+                }}>
+                  <Icon size={22} color={p.color} />
+                </div>
+                <div style={{ fontWeight: 700, fontSize: 16, color: "#111720", marginBottom: 6 }}>{p.label}</div>
+                <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.6, marginBottom: 16 }}>{p.description}</div>
+                <div style={{
+                  display: "inline-block", fontSize: 11, fontWeight: 700,
+                  padding: "3px 10px", borderRadius: 100,
+                  background: `rgba(${p.iconRgb},0.08)`,
+                  color: p.color, border: `1px solid ${p.border}`,
+                }}>
+                  {p.roles} roles mapped
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+{/* OUR STATS */}
       <section style={{
         position: "relative", zIndex: 1,
         maxWidth: 960, margin: "0 auto",
@@ -552,7 +612,7 @@ export default function LandingPage() {
               {quizCount !== null ? quizCount.toLocaleString("en-GB") : "..."}
             </div>
             <div style={{ fontSize: 15, color: "#6b7280" }}>
-              NHS professionals matched to a role
+              NHS professionals matched to a digital health career
             </div>
           </div>
 
@@ -565,66 +625,6 @@ export default function LandingPage() {
             50% { opacity: 0.5; box-shadow: 0 0 4px rgba(16,185,129,0.4); }
           }
         `}</style>
-      </section>
-
-      {/* 5 PILLARS */}
-      <section id="pillars" style={{
-        position: "relative", zIndex: 1,
-        maxWidth: 960, margin: "0 auto",
-        padding: "80px 24px",
-      }}>
-        <div style={{ textAlign: "center", marginBottom: 48 }}>
-          <p style={{ fontSize: 11, letterSpacing: "0.15em", textTransform: "uppercase", color: "#0ea5e9", marginBottom: 12 }}>
-            The Framework
-          </p>
-          <h2 style={{ fontSize: "clamp(24px, 4vw, 40px)", fontWeight: 800, color: "#111720", letterSpacing: "-0.02em", marginBottom: 12 }}>
-            5 Pillars of Digital Health
-          </h2>
-          <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 480, margin: "0 auto", lineHeight: 1.7 }}>
-            Every digital health role sits within one of these five domains.{" "}
-            <a
-              href="https://youtube.com/playlist?list=PLFtvcopV2yxqS1No0gQf6Mj7VTYfdBCUo&si=6Uz4tSdrTNKfGg-6"
-              target="_blank" rel="noopener noreferrer"
-              style={{ color: "#0ea5e9", textDecoration: "underline" }}
-            >
-              Watch a free course explaining the 5 pillars of digital health
-            </a>{" "}
-            — your quiz results map you to the pillar and the specific roles that suit you best.
-          </p>
-        </div>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 16 }}>
-          {pillars.map((p) => {
-            const Icon = p.icon;
-            return (
-              <div key={p.id} style={{
-                background: "rgba(255,255,255,0.85)",
-                border: `1px solid ${p.border}`,
-                borderRadius: 12, padding: "24px",
-                backdropFilter: "blur(4px)",
-              }}>
-                <div style={{
-                  width: 44, height: 44, borderRadius: 10,
-                  background: `rgba(${p.iconRgb},0.1)`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  marginBottom: 16,
-                }}>
-                  <Icon size={22} color={p.color} />
-                </div>
-                <div style={{ fontWeight: 700, fontSize: 16, color: "#111720", marginBottom: 6 }}>{p.label}</div>
-                <div style={{ fontSize: 13, color: "#6b7280", lineHeight: 1.6, marginBottom: 16 }}>{p.description}</div>
-                <div style={{
-                  display: "inline-block", fontSize: 11, fontWeight: 700,
-                  padding: "3px 10px", borderRadius: 100,
-                  background: `rgba(${p.iconRgb},0.08)`,
-                  color: p.color, border: `1px solid ${p.border}`,
-                }}>
-                  {p.roles} roles mapped
-                </div>
-              </div>
-            );
-          })}
-        </div>
       </section>
 
       {/* HOW IT WORKS */}
@@ -682,7 +682,7 @@ export default function LandingPage() {
           <p style={{ fontSize: 16, color: "#6b7280", maxWidth: 420, margin: "0 auto 32px" }}>
             {quizCount !== null && quizCount > 0
               ? `Join ${quizCount.toLocaleString("en-GB")} people who have already found their digital health career match.`
-              : "Join NHS professionals finding their next step in digital health."}
+              : "Join professionals finding their next step in digital health."}
           </p>
           <Link href="/quiz" style={{
             display: "inline-flex", alignItems: "center", gap: 10,
