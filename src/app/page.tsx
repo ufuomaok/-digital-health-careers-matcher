@@ -618,7 +618,7 @@ export default function LandingPage() {
               {quizCount !== null ? quizCount.toLocaleString("en-GB") : "..."}
             </div>
             <div style={{ fontSize: 15, color: "#6b7280" }}>
-              NHS professionals matched to a digital health career
+              professionals saw their digital health career matches
             </div>
           </div>
 
